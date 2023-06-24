@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         ];
         $role = ['owner', 'staff', 'staff', 'staff', 'staff', 'buyer', 'buyer', 'buyer', 'buyer', 'buyer'];
 
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             DB::table('users')->insert([
                 'username' => $username[$i],
                 'email' => $email[$i],

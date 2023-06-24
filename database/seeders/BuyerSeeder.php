@@ -52,7 +52,7 @@ class BuyerSeeder extends Seeder
         $point = [5, 6, 7, 2, 1];
         $user = [6, 7, 8, 9, 10];
 
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 4; $i++) {
             DB::table('buyer')->insert([
                 'name' => $name[$i],
                 'birthdate' => $birthdate[$i],

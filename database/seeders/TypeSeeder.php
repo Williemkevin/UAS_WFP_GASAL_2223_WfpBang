@@ -14,36 +14,19 @@ class TypeSeeder extends Seeder
      */
     public function run()
     {
-        $name = [
-            "Rina Setiawan",
-            "Ahmad Abdullah",
-            "Siti Nurhayati",
-            "Hendra Pratama"
+        $type_name = ["balita", "anak", "remaja", "pria", "wanita"];
+
+        $description = [
+            "Produk khusus untuk balita yang memberikan nutrisi dan perlindungan yang dibutuhkan.",
+            "Pilihan produk yang menyenangkan dan bermanfaat untuk anak-anak dalam masa pertumbuhan.",
+            "Produk yang sesuai dengan kebutuhan remaja, baik dalam perawatan diri maupun gaya fashion.",
+            "Pilihan produk yang dirancang khusus untuk kebutuhan pria, termasuk perawatan kulit, wangi-wangian, dan pakaian.",
+            "Produk yang dirancang khusus untuk kebutuhan wanita, termasuk perawatan kulit, kosmetik, aksesoris, dan pakaian."
         ];
-        $birthdate = [
-            "1995-08-12",
-            "1990-04-05",
-            "1988-11-30",
-            "1993-07-18"
-        ];
-        $phone = [
-            "0812345678",
-            "0876543210",
-            "08225556677",
-            "08989898989"
-        ];
-        $address = [
-            "Jl. Gajah Mada No. 15, Jakarta",
-            "Jl. Diponegoro No. 8, Bandung",
-            "Jl. Ahmad Yani No. 7, Surabaya",
-            "Jl. Malioboro No. 10, Yogyakarta"
-        ];
-        $gender = ['male', 'female', 'male', 'female'];
-        $user = [2, 3, 4, 5];
         for ($i = 0; $i < 5; $i++) {
             DB::table('types')->insert([
-                'type_name' => $name[$i],
-                'description' => $birthdate[$i],
+                'type_name' => $type_name[$i],
+                'description' => $description[$i],
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

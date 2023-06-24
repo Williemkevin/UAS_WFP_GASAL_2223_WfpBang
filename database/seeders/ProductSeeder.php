@@ -140,14 +140,16 @@ class ProductSeeder extends Seeder
 
         $dimension = ['pcs'];
         $type_id = [1, 1, 1, 1, 1, 1, 11, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5];
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 30; $i++) {
             DB::table('products')->insert([
                 'product_name' => $product_name[$i],
                 'image_url' => $image_url[$i],
                 'price' => mt_rand(1000, 100000),
                 'stock' => rand(1, 99),
                 'dimension' => $dimension[0],
-                'type_id' => $type_id[$i]
+                'type_id' => $type_id[$i],
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }
