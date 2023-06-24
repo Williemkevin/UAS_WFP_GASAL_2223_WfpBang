@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddUserIdToWishlistsTable extends Migration
+class AddUserIdToStaffsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddUserIdToWishlistsTable extends Migration
      */
     public function up()
     {
-        Schema::table('wishlists', function (Blueprint $table) {
+        Schema::table('staffs', function (Blueprint $table) {
             //
+            //Buat kolom yang akan menjadi foreign key
             $table->unsignedBigInteger('user_id');
 
             //Set kolom tersebut menjadi foreign key
@@ -29,7 +30,7 @@ class AddUserIdToWishlistsTable extends Migration
      */
     public function down()
     {
-        Schema::table('wishlists', function (Blueprint $table) {
+        Schema::table('staffs', function (Blueprint $table) {
             //Hilangkan dulu foreign keynya
             $table->dropForeign(['user_id']);
 
