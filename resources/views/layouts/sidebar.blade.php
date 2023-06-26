@@ -23,12 +23,16 @@
         </a>
       </li>
 
-      <li class="menu-item">
-        <a href="icons-boxicons.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-purchase-tag"></i>
-          <div data-i18n="Boxicons">Tipe</div>
-        </a>
-      </li>
+      @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+        <li class="menu-item">
+          <a href={{ route('admin.type.index') }} class="menu-link">
+            <i class="menu-icon tf-icons bx bx-purchase-tag"></i>
+            <div data-i18n="Boxicons">Tipe </div>
+          </a>
+        </li>
+        @endif
+      @endauth
 
       <li class="menu-item">
         <a href="{{ url('product') }}" class="menu-link">
@@ -58,11 +62,29 @@
         </a>
       </li>
 
-      <li class="menu-item">
-        <a href="tables-basic.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-log-out"></i>
-          <div data-i18n="Analytics" style="color: red">Log Out</div>
-        </a>
-      </li>
+      @auth
+
+        <li class="menu-item">
+          <a  href="{{ route('logout') }}" class="menu-link"
+              onclick="event.preventDefault();
+              document.getElementById('logout-form').submit();">
+              <i class="menu-icon tf-icons bx bx-log-out"></i>
+              <div data-i18n="Analytics" style="color: red">Log Out</div>
+          </a>
+        </li>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+          @csrf
+        </form>
+      @else
+        <li class="menu-item">
+          <a href="{{ route('login') }}" class="menu-link">
+            <i class="menu-icon tf-icons bx bx-log-in"></i>
+            <div data-i18n="Analytics" style="color: rgb(0, 160, 5)">Log In</div>
+          </a>
+        </li>
+      @endauth
+
+
+
     </ul>
   </aside>

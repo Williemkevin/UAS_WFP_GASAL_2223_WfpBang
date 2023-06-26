@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class OwnerController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,14 +15,12 @@ class OwnerController extends Controller
     public function index()
     {
         //
-        $user = Auth::user();
+        // $user = Auth::user();
 
-        if ($user->role === 'owner') {
-            // Logic for owner role
-            return view('owner.index',[
-                'user' => $user
-            ]);
-        }
+        // if ($user->role === 'owner') {
+        //     // Logic for owner role
+        //     return view('owner.index');
+        // }
     }
 
     /**

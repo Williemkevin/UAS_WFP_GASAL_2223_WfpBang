@@ -1,7 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProductController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OwnerController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\StaffController;
+use App\Http\Controllers\TipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +17,41 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::resource('product', ProductController::class);
 
+// Owner Route
+Route::group(['middleware' => ['auth', 'role:owner'],'prefix' => 'owner'], function () {
+    Route::resource('/dashboard', OwnerController::class)->names('owner.dashboard')->only(['index']);
+
+});
+
+// Staff Route
+Route::group(['middleware' => ['auth', 'role:staff'], 'prefix' => 'staff'], function () {
+    Route::resource('/dashboard', StaffController::class)->names('staff.dashboard')->only(['index']);
+});
+
+//Admin Route (Owner & Staff)
+Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin'], function () {
+    Route::resource('/type', TipeController::class)->names('admin.type')->only(['index']);
+});
+
+
+//Mencegah staff & owner ke route ( / ) setelah login
+Route::get('/', function () {
+    // return view('welcome');
+    $user = Auth::user();
+    if ($user && $user->hasRole('owner')) {
+        return redirect()->route('owner.dashboard.index');
+    } else if ($user && $user->hasRole('staff')) {
+        return redirect()->route('staff.dashboard.index');
+    }
+    else{
+        return view('welcome');
+    }
+    
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -14,6 +14,7 @@ class TipeController extends Controller
     public function index()
     {
         //
+        return view('type.index');
     }
 
     /**
