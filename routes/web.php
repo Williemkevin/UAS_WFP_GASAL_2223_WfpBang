@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\KategoriController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OwnerController;
@@ -36,6 +37,7 @@ Route::group(['middleware' => ['auth', 'role:staff'], 'prefix' => 'staff'], func
 //Admin Route (Owner & Staff)
 Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin'], function () {
     Route::resource('/type', TipeController::class)->names('admin.type')->only(['index']);
+    Route::resource('/category', KategoriController::class)->names('admin.category');
 });
 
 

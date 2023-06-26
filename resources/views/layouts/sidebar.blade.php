@@ -16,12 +16,16 @@
         </a>
       </li>
 
-      <li class="menu-item">
-        <a href="cards-basic.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-list-ul"></i>
-          <div data-i18n="Basic">Kategori</div>
-        </a>
-      </li>
+      @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+          <li class="menu-item">
+            <a href={{ route('admin.category.index') }} class="menu-link">
+              <i class="menu-icon tf-icons bx bx-list-ul"></i>
+              <div data-i18n="Basic">Kategori</div>
+            </a>
+          </li>
+        @endif
+      @endauth
 
       @auth
         @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))

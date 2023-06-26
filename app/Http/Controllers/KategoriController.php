@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -13,7 +14,14 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        //Display all category
+        $categories = Category::all();
+        return view('category.index', 
+            [
+                'categories'=>$categories
+            ]
+        );
+
     }
 
     /**
@@ -23,7 +31,8 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        //Display add new category
+        return view('category.create');
     }
 
     /**
@@ -35,6 +44,15 @@ class KategoriController extends Controller
     public function store(Request $request)
     {
         //
+        $validatedData = $request->validate([
+            'category_name' => 'required|max:45',
+            'description' => 'required|max:255'
+        ]);
+        // dd($validatedData);
+        Category::create($validatedData);
+
+        return redirect()->route('admin.category.create')->with('msg', 'Produk baru berhasil ditambahkan!');
+
     }
 
     /**
