@@ -44,6 +44,7 @@ Route::group(['middleware' => ['auth', 'role:staff'], 'prefix' => 'staff'], func
 Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin'], function () {
     Route::resource('/type', TipeController::class)->names('admin.type')->only(['index']);
     Route::resource('/category', KategoriController::class)->names('admin.category');
+    Route::get('/category/{category}/restore', [KategoriController::class, 'restore'])->name('admin.category.restore');
 });
 
 

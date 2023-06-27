@@ -14,11 +14,17 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //Display all category
+        //Display all category & soft deleted
         $categories = Category::all();
+
+        $softDeletedCategories = Category::withTrashed()
+        ->onlyTrashed()
+        ->get();
+
         return view('category.index', 
             [
-                'categories'=>$categories
+                'categories'=>$categories,
+                'deleted_categories'=>$softDeletedCategories
             ]
         );
 
@@ -124,5 +130,29 @@ class KategoriController extends Controller
     public function destroy($id)
     {
         //
+        // Find the category by ID
+        $category = Category::findOrFail($id);
+
+        // Delete the category
+        $category->delete();
+
+        // return redirect()->route('admin.category.index')->with('success', 'Kategori berhasil dihapus!');
+        return redirect()->back()->with('success', 'Kategori berhasil dihapus.');
+
+    }
+
+    // restore soft deleted categories
+
+    public function restore($id){
+        $category = Category::withTrashed()->findOrFail($id);
+
+        if ($category->trashed()) {
+            $category->restore();
+
+            // Perform any additional logic after restoring the category
+
+            return redirect()->back()->with('success', 'Kategori berhasil dikembalikan.');
+        }
+        return redirect()->back()->with('success', 'Kategori gagal dikembalikan.');
     }
 }
