@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Product;
+use App\Models\ProductHasCategories;
+use App\Models\Type;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
 {
@@ -23,7 +28,11 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        $types = Type::all();
+        $categories = Category::all();
+
+        return view('product.create',compact('types','categories'));
+        
     }
 
     /**
@@ -34,7 +43,33 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $produk = new Product();
+        $produk->product_name = $request->get('namaProduct');
+        $produk->image_url = $request->get('imageProduct');
+        $produk->price = $request->get('priceProduct');
+        $produk->stock = $request->get('stock');
+        $produk->dimension = $request->get('dimesion');
+        $produk->type_id = $request->get('type');
+        $produk->save();
+
+        if (empty($kategori)) {
+            return Redirect::back();
+        } else {
+            $i = 0;
+            foreach ($kategori as $k) {
+                if ($k != '-') {
+                    $product = app(ProductController::class);
+
+                    $productCategories = new ProductHasCategories();
+                    $productCategories->product_id = $product->id;
+                    $productCategories->category_id = $k->id;
+                    $productCategories->created_at = now("Asia/Bangkok");
+                    $productCategories->updated_at = now("Asia/Bangkok");
+                    $productCategories->save();
+                    $i++;
+                }
+            }
+        }
     }
 
     /**

@@ -20,7 +20,7 @@ use App\Http\Controllers\TipeController;
 */
 Auth::routes();
 
-
+    
 Route::resource('product', ProductController::class);
 
 // Owner Route
@@ -52,8 +52,7 @@ Route::get('/', function () {
     }
     else{
         return view('welcome');
-    }
-    
+    }    
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

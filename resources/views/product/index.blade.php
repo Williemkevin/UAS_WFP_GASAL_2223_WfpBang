@@ -1,6 +1,14 @@
 @extends('layouts.sneat')
 
 @section('content')
+<div class="portlet-title">
+    <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
+        List Product
+    </div>
+    <div style="float: right; margin: 15px;">
+        <a href="{{url('product/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Produk</a>
+    </div>
+</div>
 <section>
     <div class="container px-2 px-lg-2   mt-2">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
