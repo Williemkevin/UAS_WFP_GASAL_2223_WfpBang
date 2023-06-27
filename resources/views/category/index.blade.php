@@ -151,6 +151,11 @@
                     <h5 class="card-header">Tidak Ada Kategori</h5>
                 @else
                     <h5 class="card-header">Daftar Kategori</h5>
+                        @if (session('success'))
+                            <div class="alert alert-primary" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <div class="table-responsive text-nowrap">
                             <table class="table">
                                 <thead class="table-light">
@@ -173,7 +178,7 @@
                                             <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="javascript:void(0);"
+                                                <a class="dropdown-item" href="{{ route('admin.category.edit', ['category' => $category->id]) }}"
                                                     ><i class="bx bx-edit-alt me-1"></i> Edit</a
                                                 >
                                                 <a class="dropdown-item" href="javascript:void(0);"

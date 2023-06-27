@@ -75,6 +75,10 @@ class KategoriController extends Controller
     public function edit($id)
     {
         //
+        $category = Category::find($id);
+        return view('category.edit', [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -87,6 +91,28 @@ class KategoriController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $category = Category::find($id);
+
+        $validatedData = $request->validate([
+            'category_name' => 'required|max:45',
+            'description' => 'required|max:255'
+        ]);
+
+        if($category->category_name == $validatedData['category_name'] && $category->description == $validatedData['description']){
+            // dd('same data');
+            return redirect()->route('admin.category.edit', ['category' => $id])->with('msg', 'Tidak Ada Perubahan Data!');
+        }
+        else{
+            // dd('data changed');
+            $category->category_name = $validatedData['category_name'];
+            $category->description = $validatedData['description'];
+
+            Category::where('id', $id)->update($validatedData);
+
+            return redirect()->route('admin.category.index')->with('success', 'Kategori berhasil diperbaharui!');
+
+
+        }
     }
 
     /**
