@@ -18,6 +18,8 @@ class ProductHasCategoriesSeeder extends Seeder
             DB::table('products_has_categories')->insert([
                 'product_id' => rand(1, 30),
                 'category_id' => rand(1, 10),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
     }

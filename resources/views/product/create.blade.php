@@ -17,19 +17,19 @@
     @csrf
     <div class="form-group">
         <label for="exampleInputEmaill">Nama product :</label>
-        <input type="text" name="namaDokter" class="form-control" id="namaProduct" aria-describedby="nameHelp">
+        <input type="text" name="namaProduct" class="form-control" id="namaProduct" aria-describedby="nameHelp">
 
         <label for="exampleInputEmaill">Image Url : </label>
-        <input type="text" name="emailDokter" class="form-control" id="imageProduct" aria-describedby="nameHelp">
+        <input type="text" name="imageProduct" class="form-control" id="imageProduct" aria-describedby="nameHelp">
 
         <label for="exampleInputEmaill">Price : </label>
-        <input type="text" name="usernameDokter" class="form-control" id="priceProduct" aria-describedby="nameHelp">
+        <input type="number" name="priceProduct" class="form-control" id="priceProduct" aria-describedby="nameHelp">
 
         <label for="exampleInputEmaill">Stock : </label>
-        <input type="password" name="password" class="form-control" id="stock" aria-describedby="nameHelp">
+        <input type="number" name="stock" class="form-control" id="stock" aria-describedby="nameHelp">
 
         <label for="exampleInputEmaill">Dimension : </label>
-        <input type="text" name="singkatan" class="form-control" id="dimesion" aria-describedby="nameHelp">
+        <input type="text" name="dimesion" class="form-control" id="dimesion" aria-describedby="nameHelp">
         <label for="exampleInputEmaill">Type : </label>
         <div>
             <select class="form-select" aria-label="Default select example" name="type" id="type">

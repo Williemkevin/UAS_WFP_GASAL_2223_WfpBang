@@ -22,6 +22,10 @@ Auth::routes();
 
     
 Route::resource('product', ProductController::class);
+Route::post('product/aktifkan', [ProductController::class, 'aktifkan'])->name('product.aktifkan');
+Route::post('product/nonaktifkan', [ProductController::class, 'nonaktifkan'])->name('product.nonaktifkan');
+
+
 
 // Owner Route
 Route::group(['middleware' => ['auth', 'role:owner'],'prefix' => 'owner'], function () {
