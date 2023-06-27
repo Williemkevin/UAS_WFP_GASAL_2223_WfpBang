@@ -15,8 +15,8 @@ class AddTypeNameToTypesTable extends Migration
     {
         Schema::table('types', function (Blueprint $table) {
             //
-            $table->enum('type_name', ['Bayi', 'Balita', 'Anak', 'Remaja', 'Pria', 'Wanita'])->after('id');
-            
+            // $table->enum('type_name', ['Bayi', 'Balita', 'Anak', 'Remaja', 'Pria', 'Wanita'])->after('id');
+
         });
     }
 

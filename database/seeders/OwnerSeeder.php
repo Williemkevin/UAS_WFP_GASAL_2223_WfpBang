@@ -15,7 +15,7 @@ class OwnerSeeder extends Seeder
     public function run()
     {
         DB::table('owners')->insert([
-            'name' => "Bagas Suryanto",
+            // 'name' => "Bagas Suryanto",
             'created_at' => now(),
             'updated_at' => now(),
             'user_id' => 1

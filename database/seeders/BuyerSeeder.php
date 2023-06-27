@@ -53,8 +53,8 @@ class BuyerSeeder extends Seeder
         $user = [6, 7, 8, 9, 10];
 
         for ($i = 0; $i < 4; $i++) {
-            DB::table('buyer')->insert([
-                'name' => $name[$i],
+            DB::table('buyers')->insert([
+                // 'name' => $name[$i],
                 'birthdate' => $birthdate[$i],
                 'phone' => $phone[$i],
                 'address' => $address[$i],

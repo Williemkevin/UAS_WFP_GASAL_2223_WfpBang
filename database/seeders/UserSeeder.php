@@ -14,6 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        $name = ["John","Sarah","Mike","Lisa","Robert","Emily","David","Jennifer","Andrew","Laura"];
         $username = ["johnsmith", "sarahjones", "mikedavis", "lisawilson", "robertbrown", "emilythomas", "davidmiller", "jenniferlee", "andrewrobinson", "laurawhite"];
         $email  = [
             "john.smith@example.com", "sarah.jones@email.com", "mike.davis@example.com", "lisa.wilson@email.com",
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             DB::table('users')->insert([
+                'name' => $name[$i],
                 'username' => $username[$i],
                 'email' => $email[$i],
                 'password' => $username[$i],

@@ -17,7 +17,7 @@ class WishlistSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
             DB::table('wishlists')->insert([
                 'product_id' => rand(1, 30),
-                'buyer_id' => rand(6, 10),
+                'buyer_id' => rand(1, 3),
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

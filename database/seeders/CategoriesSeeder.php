@@ -40,7 +40,7 @@ class CategoriesSeeder extends Seeder
             "Kosmetik mata untuk tampilan mata yang menawan"
         ];
         for ($i = 0; $i < 10; $i++) {
-            DB::table('staffs')->insert([
+            DB::table('categories')->insert([
                 'category_name' => $category[$i],
                 'description' => $deskripsi[$i],
                 'created_at' => now(),

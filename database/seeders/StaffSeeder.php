@@ -42,7 +42,7 @@ class StaffSeeder extends Seeder
         $user = [2, 3, 4, 5];
         for ($i = 0; $i < 4; $i++) {
             DB::table('staffs')->insert([
-                'name' => $name[$i],
+                // 'name' => $name[$i],
                 'birthdate' => $birthdate[$i],
                 'phone' => $phone[$i],
                 'address' => $address[$i],
