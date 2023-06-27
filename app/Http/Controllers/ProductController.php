@@ -19,8 +19,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('status', '1')->get(); 
-        return view('product.index',compact('products'));
+        $productAktif = Product::where('status', '1')->get();
+        $productNonAktif = Product::where('status', '0')->get();
+
+        return view('product.index', compact('productAktif', 'productNonAktif'));
     }
 
     /**
@@ -33,8 +35,7 @@ class ProductController extends Controller
         $types = Type::all();
         $categories = Category::all();
 
-        return view('product.create',compact('types','categories'));
-        
+        return view('product.create', compact('types', 'categories'));
     }
 
     /**
@@ -74,7 +75,6 @@ class ProductController extends Controller
             }
         }
         return redirect()->route('product.index')->with('status', 'New Product ' .  $produk->product_name . ' is already inserted');
-
     }
 
     /**
@@ -85,7 +85,6 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        
     }
 
     /**
@@ -96,12 +95,12 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        $produk = Product::where('id', $id)->first(); 
+        $produk = Product::where('id', $id)->first();
         $types = Type::all();
         $categories = Category::all();
-        $productCategories = ProductsHasCategories::where('product_id', $id)->get(); 
+        $productCategories = ProductsHasCategories::where('product_id', $id)->get();
 
-        return view('product.edit',compact('types','categories','produk','productCategories'));
+        return view('product.edit', compact('types', 'categories', 'produk', 'productCategories'));
     }
 
     /**
@@ -115,7 +114,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $deleteProdukCategori = ProductsHasCategories::where('product_id', $id)->delete();
-        
+
         $product->product_name = $request->get('namaProduct');
         $product->image_url = $request->get('imageProduct');
         $product->price = $request->get('priceProduct');
@@ -141,7 +140,9 @@ class ProductController extends Controller
                     $i++;
                 }
             }
-        } }
+        }
+        return redirect()->route('product.index')->with('status', 'Product ' .  $product->product_name . ' is already Updated');
+    }
 
     /**
      * Remove the specified resource from storage.

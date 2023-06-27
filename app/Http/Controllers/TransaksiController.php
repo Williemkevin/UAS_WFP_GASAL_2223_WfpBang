@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transactions;
+use App\Models\Transaksi;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TransaksiController extends Controller
@@ -11,9 +14,20 @@ class TransaksiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($bulan = null, $tahun = null)
     {
-        //
+        if ($bulan == null && $tahun == null) {
+            $bulan = Carbon::now()->month;
+            $tahun = Carbon::now()->year;
+        }
+        $transaksis = Transactions::join('products_has_transactions as THP', 'transactions.ID', '=', 'THP.transaction_id')
+            ->join('products as P', 'THP.product_id', '=', 'P.ID')
+            ->join('buyers as B', 'transactions.buyer_id', '=', 'B.ID')
+            ->join('users as U', 'B.user_id', '=', 'U.ID')
+            ->select('transactions.*', 'THP.product_id', 'THP.price', 'THP.quantity', 'P.product_name', 'U.name')
+            ->whereRaw("MONTH(transactions.transaction_date) = $bulan")
+            ->whereRaw("YEAR(transactions.transaction_date) = $tahun")->get();
+        return view('transaksi.index', compact('transaksis'));
     }
 
     /**

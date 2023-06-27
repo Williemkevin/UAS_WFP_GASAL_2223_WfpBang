@@ -7,6 +7,7 @@ use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TipeController;
+use App\Http\Controllers\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +19,20 @@ use App\Http\Controllers\TipeController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Auth::routes();
 
-    
+
 Route::resource('product', ProductController::class);
 Route::post('product/aktifkan', [ProductController::class, 'aktifkan'])->name('product.aktifkan');
 Route::post('product/nonaktifkan', [ProductController::class, 'nonaktifkan'])->name('product.nonaktifkan');
 
+Route::resource('transaksi', TransaksiController::class);
 
 
 // Owner Route
-Route::group(['middleware' => ['auth', 'role:owner'],'prefix' => 'owner'], function () {
+Route::group(['middleware' => ['auth', 'role:owner'], 'prefix' => 'owner'], function () {
     Route::resource('/dashboard', OwnerController::class)->names('owner.dashboard')->only(['index']);
-
 });
 
 // Staff Route
@@ -53,10 +55,10 @@ Route::get('/', function () {
         return redirect()->route('owner.dashboard.index');
     } else if ($user && $user->hasRole('staff')) {
         return redirect()->route('staff.dashboard.index');
-    }
-    else{
+    } else {
         return view('welcome');
-    }    
+    }
 });
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/transaksi/{bulan?}/{tahun?}', [TransaksiController::class, 'index'])->name('transaksi.index');

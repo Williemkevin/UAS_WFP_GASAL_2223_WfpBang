@@ -46,7 +46,7 @@
       </li>
 
       <li class="menu-item">
-        <a href="tables-basic.html" class="menu-link">
+        <a href="{{ url('transaksi') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-basket"></i>
           <div data-i18n="Tables">Transaksi</div>
         </a>
