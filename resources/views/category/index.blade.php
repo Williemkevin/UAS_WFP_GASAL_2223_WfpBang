@@ -146,53 +146,103 @@
                         <iconify-icon icon="bx:plus"></iconify-icon>&nbsp; Tambah Kategori
                         {{-- <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Tambah Kategori --}}
                     </a>
-                </div>
-                @if ($categories->count() == 0)
-                    <h5 class="card-header">Tidak Ada Kategori</h5>
-                @else
-                    <h5 class="card-header">Daftar Kategori</h5>
-                        @if (session('success'))
-                            <div class="alert alert-primary" role="alert">
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        <div class="table-responsive text-nowrap">
-                            <table class="table">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Deskripsi</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody class="table-border-bottom-0">
-                                @foreach ($categories as $category)
-                                    <tr>
-                                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $category->category_name }}</strong></td>
-                                        <td>
-                                            {{ $category->description }}
-                                        </td>
-                                        <td>
-                                        <div class="dropdown">
-                                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                            </button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="{{ route('admin.category.edit', ['category' => $category->id]) }}"
-                                                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                                >
-                                                <a class="dropdown-item" href="javascript:void(0);"
-                                                    ><i class="bx bx-trash me-1"></i> Delete</a
-                                                >
-                                            </div>
+                    
+                <div class="row">
+                    <div class="col-xl-12">
+                    <div class="nav-align-top mb-4">
+                        <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <button
+                            type="button"
+                            class="nav-link active"
+                            role="tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#navs-top-home"
+                            aria-controls="navs-top-home"
+                            aria-selected="true"
+                            >
+                            Kategori Aktif
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                            type="button"
+                            class="nav-link"
+                            role="tab"
+                            data-bs-toggle="tab"
+                            data-bs-target="#navs-top-profile"
+                            aria-controls="navs-top-profile"
+                            aria-selected="false"
+                            >
+                            Kategori Non Aktif
+                            </button>
+                        </li>
+                        </ul>
+                        <div class="tab-content">
+                        <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
+                        @if ($categories->count() == 0)
+                            <h5 class="card-header">Tidak Ada Kategori</h5>
+                        @else
+                        <h5 class="card-header">Daftar Kategori</h5>
+                                    @if (session('success'))
+                                        <div class="alert alert-primary" role="alert">
+                                            {{ session('success') }}
                                         </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
+                                    @endif
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table">
+                                            <thead class="table-light">
+                                            <tr>
+                                                <th>Nama</th>
+                                                <th>Deskripsi</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+                                            @foreach ($categories as $category)
+                                                <tr>
+                                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $category->category_name }}</strong></td>
+                                                    <td>
+                                                        {{ $category->description }}
+                                                    </td>
+                                                    <td>
+                                                    <div class="dropdown">
+                                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                                        </button>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item" href="{{ route('admin.category.edit', ['category' => $category->id]) }}"
+                                                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                                            >
+                                                            <a class="dropdown-item" href="javascript:void(0);"
+                                                                ><i class="bx bx-trash me-1"></i> Delete</a
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                        @endif
+                            </div>
+                            <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
+                                {{-- <p>
+                                Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+                                cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+                                cheesecake fruitcake.
+                                </p>
+                                <p class="mb-0">
+                                Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+                                cotton candy liquorice caramels.
+                                </p> --}}
+                            </div>
+                            </div>
                         </div>
-                @endif
+                    </div>
+                </div>
+                </div>
             </div>
     </div>
 </section>
