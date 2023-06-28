@@ -13,14 +13,16 @@
         Add New Product
     </div>
 </div>
-<form method="POST" action="{{route('product.store')}}">
+<form method="POST" action="{{route('product.store')}}" enctype="multipart/form-data">
     @csrf
     <div class="form-group">
         <label for="exampleInputEmaill">Nama product :</label>
         <input type="text" name="namaProduct" class="form-control" id="namaProduct" aria-describedby="nameHelp">
 
-        <label for="exampleInputEmaill">Image Url : </label>
-        <input type="text" name="imageProduct" class="form-control" id="imageProduct" aria-describedby="nameHelp">
+        <div class="mb-3">
+            <label for="exampleInputEmaill">Image Url : </label>
+            <input class="form-control" type="file" id="image" name="image">
+        </div>
 
         <label for="exampleInputEmaill">Price : </label>
         <input type="number" name="priceProduct" class="form-control" id="priceProduct" aria-describedby="nameHelp">

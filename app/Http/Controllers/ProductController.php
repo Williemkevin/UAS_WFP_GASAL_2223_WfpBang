@@ -48,7 +48,7 @@ class ProductController extends Controller
     {
         $produk = new Product();
         $produk->product_name = $request->get('namaProduct');
-        $produk->image_url = $request->get('imageProduct');
+        $produk->image_url = $request->file('image')->store('product-image');   
         $produk->price = $request->get('priceProduct');
         $produk->stock = $request->get('stock');
         $produk->dimension = $request->get('dimesion');

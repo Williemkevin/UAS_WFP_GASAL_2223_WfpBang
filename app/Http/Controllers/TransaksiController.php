@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buyer;
+use App\Models\Product;
+use App\Models\Staff;
 use App\Models\Transactions;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TransaksiController extends Controller
 {
@@ -37,7 +41,12 @@ class TransaksiController extends Controller
      */
     public function create()
     {
-        //
+        $products = Product::all();
+        $staffs = DB::table('staffs AS s')->join('users AS u', 's.user_id', '=', 'u.id')->select('s.id', 'u.name')->get();
+        $buyers = DB::table('buyers AS b')->join('users AS u', 'b.user_id', '=', 'u.id')->select('b.id', 'u.name')->get();
+
+
+        return view('transaksi.create', compact('products','staffs','buyers'));
     }
 
     /**
