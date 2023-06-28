@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->double('price', 8, 2);
             $table->integer('stock')->default(0);
             $table->string('dimension', 45);
+            $table->enum('status', ['aktif', 'tidak aktif']);
             $table->timestamps();
         });
     }
