@@ -20,7 +20,7 @@ class CreateTransactionsTable extends Migration
             $table->double('tax', 8, 2);
             $table->double('grand_total', 8, 2);
             $table->integer('get_point');
-            $table->integer('redeem_point');
+            $table->integer('redeem_point')->default(0);
             $table->timestamps();
         });
     }

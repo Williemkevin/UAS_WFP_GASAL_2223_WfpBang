@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Buyer;
 use App\Models\Product;
+use App\Models\ProductsHasTransactions;
 use App\Models\Staff;
 use App\Models\Transactions;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 
 class TransaksiController extends Controller
 {
@@ -46,7 +48,7 @@ class TransaksiController extends Controller
         $buyers = DB::table('buyers AS b')->join('users AS u', 'b.user_id', '=', 'u.id')->select('b.id', 'u.name')->get();
 
 
-        return view('transaksi.create', compact('products','staffs','buyers'));
+        return view('transaksi.create', compact('products', 'staffs', 'buyers'));
     }
 
     /**
@@ -57,7 +59,38 @@ class TransaksiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $transactions = new Transactions();
+        $transactions->transaction_date = $request->get('tanggalTransaksi');
+        $transactions->total = $request->get('total');
+        $transactions->tax = $request->get('tax');
+        $transactions->grand_total = $request->get('grandtotal');
+        $transactions->get_point = $request->get('grandtotal') / 100;
+        // $transactions->redeem_point = $request->get('grandtotal');
+        $transactions->buyer_id = $request->get('namaCustomer');
+        $transactions->staff_id = $request->get('namaStaff');
+
+        $transactions->save();
+
+        $arrayProduk = json_decode($request->get('arrayProduk'), true);
+        // ddd($arrayProduk);
+        if (empty($arrayProduk)) {
+            return Redirect::back();
+        } else {
+            foreach ($arrayProduk as $ap) {
+                if ($ap != '-') {
+                    $productTransaction = new ProductsHasTransactions();
+                    $productTransaction->product_id = $ap['id'];
+                    $productTransaction->quantity = $ap['jumlah'];
+                    $productTransaction->price = $ap['harga'];
+                    $productTransaction->transaction_id = $transactions->id;
+
+                    $productTransaction->created_at = now("Asia/Bangkok");
+                    $productTransaction->updated_at = now("Asia/Bangkok");
+                    $productTransaction->save();
+                }
+            }
+        }
+        return $this->create();
     }
 
     /**

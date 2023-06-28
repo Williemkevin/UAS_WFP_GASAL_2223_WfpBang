@@ -16,7 +16,7 @@ class CreateProductsHasTransactions extends Migration
         Schema::create('products_has_transactions', function (Blueprint $table) {
             $table->integer('quantity');
             $table->double('price', 8, 2);
-
+            $table->timestamps();
         });
     }
 
