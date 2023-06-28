@@ -38,8 +38,8 @@
 </div>
 
 <section>
-    <div class="table-responsive">
-        <table id="dokterAktif" class="table table-striped" style="width:100%">
+    <div class="table-responsive" >
+        <table id="tabelTransaksi" class="table table-striped" style="width:100%">
             <thead class="table-border-bottom-0">
                 <tr>
                     <th>No</th>
@@ -80,6 +80,11 @@
 
 @section('script')
 <script>
+    $(document).ready(function () {
+        $('#tabelTransaksi').DataTable({
+            "scrollX": true
+        });
+    });
     $("#bulan").on('change', function() {
         var bulanSelected = $("#bulan").val().split('-');
         window.location.href = '/transaksi/' + bulanSelected[0] + '/' + bulanSelected[1] ;

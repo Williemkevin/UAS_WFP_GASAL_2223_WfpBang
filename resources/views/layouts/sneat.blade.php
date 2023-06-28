@@ -67,6 +67,9 @@
     {{-- <link rel="stylesheet" href="../assets/vendor/libs/apex-charts/apex-charts.css" /> --}}
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/apex-charts/apex-charts.css') }}" />
 
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{{ asset('../assets/DataTables/datatables.css') }}">
+
     <!-- Page CSS -->
 
     <!-- Helpers -->
