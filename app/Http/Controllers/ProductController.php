@@ -19,8 +19,8 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $productAktif = Product::where('status', '1')->get();
-        $productNonAktif = Product::where('status', '0')->get();
+        $productAktif = Product::where('status', 'aktif')->get();
+        $productNonAktif = Product::where('status', 'tidak aktif')->get();
 
         return view('product.index', compact('productAktif', 'productNonAktif'));
     }
@@ -48,7 +48,7 @@ class ProductController extends Controller
     {
         $produk = new Product();
         $produk->product_name = $request->get('namaProduct');
-        $produk->image_url = $request->file('image')->store('product-image');   
+        $produk->image_url = $request->file('image')->store('product-image');
         $produk->price = $request->get('priceProduct');
         $produk->stock = $request->get('stock');
         $produk->dimension = $request->get('dimesion');

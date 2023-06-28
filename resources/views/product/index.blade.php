@@ -10,17 +10,19 @@
     </div>
 </div>
 
+
 @if (session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
-
 <section>
     <div class="container px-2 px-lg-2 mt-2">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                    <img class="card-img-top" src="{{asset('storage/app/' . $product->image_url)}}" alt="..." />
+                    {{-- // <img class="card-img-top" src="storage\app\product-image\product1.png" alt="..." /> --}}
+
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>
