@@ -100,13 +100,14 @@
             <!-- Content -->
 
             <div class="container-xxl flex-grow-1 container-p-y">
-
                 <div class="card" style="padding: 20px;">
                   @auth
                     @if (Auth::user()->hasRole('buyer'))
                         Hello, {{ Auth::user()->role }}:  {{ Auth::user()->name }}
                     @endif
                   @endauth
+                    @include('layouts.navbar')
+                    @include('layouts.total-card')
                     @yield('content')
                 </div>
             </div>

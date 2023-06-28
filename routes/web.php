@@ -33,6 +33,14 @@ Route::resource('transaksi', TransaksiController::class);
 // Owner Route
 Route::group(['middleware' => ['auth', 'role:owner'], 'prefix' => 'owner'], function () {
     Route::resource('/dashboard', OwnerController::class)->names('owner.dashboard')->only(['index']);
+    
+    //Register staff account by owner
+    Route::get('/register', [StaffController::class, 'formRegister'])->name('owner.staff.register');
+    Route::post('/registeraccount', [StaffController::class, 'register'])->name('owner.staff.registeraccount');
+    
+    //Activate staff account by owner
+    Route::get('/activate{id}', [StaffController::class, 'formActivate'])->name('owner.staff.activate');
+    Route::post('/verified', [StaffController::class, 'verifiedAccount'])->name('owner.staff.verified');
 });
 
 // Staff Route
@@ -49,6 +57,11 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
     //category route
     Route::resource('/category', KategoriController::class)->names('admin.category');
     Route::get('/category/{category}/restore', [KategoriController::class, 'restore'])->name('admin.category.restore');
+
+    //list staff route
+    Route::resource('/staff', StaffController::class)->names('admin.staff');
+    Route::get('/staff/{staff}/restore', [StaffController::class, 'restore'])->name('admin.staff.restore');
+
 });
 
 
