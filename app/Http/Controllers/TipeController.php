@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class TipeController extends Controller
@@ -13,8 +14,17 @@ class TipeController extends Controller
      */
     public function index()
     {
-        //
-        return view('type.index');
+        //Display all types & soft deleted
+        $types = Type::all();
+
+        $softDeletedTypes = Type::withTrashed()
+        ->onlyTrashed()
+        ->get();
+
+        return view('type.index',[
+            'types' => $types,
+            'deleted_types' => $softDeletedTypes
+        ]);
     }
 
     /**
@@ -24,7 +34,8 @@ class TipeController extends Controller
      */
     public function create()
     {
-        //
+        //Display add new category
+        return view('type.create');
     }
 
     /**
@@ -36,6 +47,15 @@ class TipeController extends Controller
     public function store(Request $request)
     {
         //
+        //
+        $validatedData = $request->validate([
+            'type_name' => 'required|max:45',
+            'description' => 'required|max:255'
+        ]);
+        // dd($validatedData);
+        Type::create($validatedData);
+
+        return redirect()->route('admin.type.create')->with('msg', 'Tipe baru berhasil ditambahkan!');
     }
 
     /**
@@ -58,6 +78,10 @@ class TipeController extends Controller
     public function edit($id)
     {
         //
+        $type = Type::find($id);
+        return view('type.edit', [
+            'type' => $type
+        ]);
     }
 
     /**
@@ -70,6 +94,25 @@ class TipeController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $type = Type::find($id);
+
+        $validatedData = $request->validate([
+            'type_name' => 'required|max:45',
+            'description' => 'required|max:255'
+        ]);
+
+        if ($type->type_name == $validatedData['type_name'] && $type->description == $validatedData['description']) {
+            // dd('same data');
+            return redirect()->route('admin.type.edit', ['type' => $id])->with('msg', 'Tidak Ada Perubahan Data!');
+        } else {
+            // dd('data changed');
+            $type->type_name = $validatedData['type_name'];
+            $type->description = $validatedData['description'];
+
+            Type::where('id', $id)->update($validatedData);
+
+            return redirect()->route('admin.type.index')->with('success', 'Tiper berhasil diperbaharui!');
+        }
     }
 
     /**
@@ -81,5 +124,22 @@ class TipeController extends Controller
     public function destroy($id)
     {
         //
+        $type = Type::findOrFail($id);
+
+        $type->delete();
+
+        return redirect()->back()->with('success', 'Tipe berhasil dihapus.');
+    }
+
+    public function restore($id)
+    {
+        $type = Type::withTrashed()->findOrFail($id);
+
+        if ($type->trashed()) {
+            $type->restore();
+
+            return redirect()->back()->with('success', 'Tipe berhasil dikembalikan.');
+        }
+        return redirect()->back()->with('success', 'Tipe gagal dikembalikan.');
     }
 }

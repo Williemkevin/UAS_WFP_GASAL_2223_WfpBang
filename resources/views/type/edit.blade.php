@@ -158,12 +158,12 @@
                                 <div class="card-header d-flex justify-content-between align-items-center">
                                 </div>
                                 <div class="card-body">
-                                    <form action="{{ route('admin.type.store') }}" method="POST">
+                                    <form action="{{ route('admin.type.update', ['type' => $type->id]) }}" method="POST">
                                         @csrf
-
+                                        @method("PUT")
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-default-fullname">Nama Tipe</label>
-                                            <input type="text" class="form-control" id="basic-default-fullname" name="type_name" placeholder="Anak-anak" />
+                                            <input type="text" class="form-control" id="basic-default-fullname" name="type_name" placeholder="Anak-anak" value="{{ $type->type_name }}" />
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="basic-default-message">Deskripsi Tipe</label>
@@ -172,7 +172,7 @@
                                                 class="form-control"
                                                 placeholder="Suitable for Cold Weather!"
                                                 name="description"
-                                            ></textarea>
+                                            >{{ $type->description }}</textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                         <a class="btn btn-primary" href={{ route('admin.type.index') }}>Daftar Tipe</a>
