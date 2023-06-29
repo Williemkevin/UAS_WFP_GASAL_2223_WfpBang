@@ -8,10 +8,12 @@
     <div class="container px-2 px-lg-2   mt-2">
             <div class="card">
                 <div class="demo-inline-spacing">
-                    <a href={{ route('admin.staff.create') }} class="btn rounded-pill btn-primary">
-                        <iconify-icon icon="bx:plus"></iconify-icon>&nbsp; Tambah Staff
-                        {{-- <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Tambah Kategori --}}
-                    </a>
+                    @if (Auth::user()->hasRole('owner'))
+                        <a href={{ route('admin.staff.create') }} class="btn rounded-pill btn-primary">
+                            <iconify-icon icon="bx:plus"></iconify-icon>&nbsp; Tambah Staff
+                            {{-- <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Tambah Kategori --}}
+                        </a>
+                    @endif
                 <div class="row">
                     <div class="col-xl-12">
                     <div class="nav-align-top mb-4">
@@ -48,7 +50,7 @@
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
                                 @if ($user_staffs->count() == 0)
-                                <h5 class="card-header" id="inactive-type-text">Tidak Ada Staff Aktif</h5>
+                                    <h5 class="card-header" id="inactive-staff-text">Tidak Ada Staff Aktif</h5>
                                 @else
                                 <h5 class="card-header">Daftar Staff Aktif</h5>
                                 @if (session('success'))
@@ -65,7 +67,9 @@
                                                 <th>Email</th>
                                                 <th>No Handphone</th>
                                                 <th>Alamat</th>
-                                                <th>Action</th>
+                                                @if (Auth::user()->hasRole('owner'))
+                                                    <th>Action</th>
+                                                @endif
                                             </tr>
                                             </thead>
                                             <tbody class="table-border-bottom-0">
@@ -85,20 +89,22 @@
                                                         {{ $staff->address }}
                                                     </td>
                                                     <td>
-                                                    <div class="dropdown">
-                                                        <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                                        <i class="bx bx-dots-vertical-rounded"></i>
-                                                        </button>
-                                                        <div class="dropdown-menu">
-                                                            <a class="dropdown-item" href="{{ route('admin.staff.edit', ['staff' => $staff->id]) }}"
-                                                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                                                            >
-                                                            <!-- Trigger modal -->
-                                                            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $staff->id }}"
-                                                                ><i class="bx bx-trash me-1"></i> Delete</a
-                                                            >
-                                                        </div>
-                                                    </div>
+                                                        @if (Auth::user()->hasRole('owner'))
+                                                            <div class="dropdown">
+                                                                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                                                </button>
+                                                                <div class="dropdown-menu">
+                                                                    <a class="dropdown-item" href="{{ route('admin.staff.edit', ['staff' => $staff->id]) }}"
+                                                                        ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                                                    >
+                                                                    <!-- Trigger modal -->
+                                                                    <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $staff->id }}"
+                                                                        ><i class="bx bx-trash me-1"></i> Delete</a
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             <div>
@@ -127,7 +133,7 @@
                                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                                 Tidak
                                                             </button>
-                                                            <button type="button" class="btn btn-primary" data-type-id="{{ $staff->id }}">Ya</button>
+                                                            <button type="button" class="btn btn-primary" data-staff-id="{{ $staff->id }}">Ya</button>
                                                         </div>
                                                         </div>
                                                     </div>
@@ -142,7 +148,7 @@
                             @endif
                             <div class="tab-pane fade" id="navs-top-profile" role="tabpanel">
                                 @if ($deleted_staffs->count() == 0)
-                                    <h5 class="card-header" id="active-type-text">Tidak Ada Staff Non Aktif</h5>
+                                    <h5 class="card-header" id="active-staff-text">Tidak Ada Staff Non Aktif</h5>
                                 @else
                                     {{-- Ada Kategori Non Aktif --}}
                                     <h5 class="card-header">Daftar Staff Non Aktif</h5>
@@ -156,18 +162,20 @@
                                                 <th>Email</th>
                                                 <th>No Handphone</th>
                                                 <th>Alamat</th>
-                                                <th>Action</th>
+                                                @if (Auth::user()->hasRole('owner'))
+                                                    <th>Action</th>
+                                                @endif
                                             </tr>
                                             </thead>
                                             <tbody class="table-border-bottom-0">
                                             @foreach ($deleted_staffs as $staff)
                                                 <tr>
-                                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $staff->name }}</strong></td>
+                                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $staff->user->name }}</strong></td>
                                                     <td>
-                                                        {{ $staff->username }}
+                                                        {{ $staff->user->username }}
                                                     </td>
                                                     <td>
-                                                        {{ $staff->email }}
+                                                        {{ $staff->user->email }}
                                                     </td>
                                                     <td>
                                                         {{ $staff->phone }}
@@ -176,9 +184,11 @@
                                                         {{ $staff->address }}
                                                     </td>
                                                     <td>
-                                                    <a href="{{ route('admin.staff.restore', ['staff' => $staff->id]) }}" class="btn btn-primary">
-                                                        Restore
-                                                    </a>
+                                                        @if (Auth::user()->hasRole('owner'))
+                                                            <a href="{{ route('admin.staff.restore', ['staff' => $staff->id]) }}" class="btn btn-primary">
+                                                                Restore
+                                                            </a>
+                                                        @endif                                            
                                                     </td>
                                                 </tr>
                                             <div>
@@ -207,7 +217,7 @@
                                                             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                                 Tidak
                                                             </button>
-                                                            <button type="button" class="btn btn-primary" data-type-id="{{ $staff->id }}">Ya</button>
+                                                            <button type="button" class="btn btn-primary" data-staff-id="{{ $staff->id }}">Ya</button>
                                                         </div>
                                                         </div>
                                                     </div>
@@ -228,4 +238,68 @@
             {{-- <div id="myElement">Hello, jQuery!</div> --}}
     </div> 
 </section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+    // Delete Button
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all delete buttons
+        var deleteButtons = document.querySelectorAll('.modal .btn-primary');
+
+        // Loop through delete buttons
+        deleteButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                
+                //get the ID
+                var staffId = $(this).data('staff-id');
+
+                $.ajax({
+                    url: '{{ route('admin.staff.destroy', ['staff' => '__staffId__']) }}'.replace('__staffId__', staffId),
+                    type: 'POST',
+                    data: {_method:'delete'},
+                    headers:{
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    ,
+                    success: function(response){
+                        // alert('Kategori Berhasil Dihapus!');
+                        $('#modalCenter-' + staffId).modal('hide');
+                        location.reload();
+                    },
+                    error:function(error){
+                        // alert('Terjadi Error');
+                        alert(error)
+                    }
+                });
+            });
+        });
+    });
+
+    //Tab
+   // Get the elements
+    const inactiveStaffText = document.getElementById('inactive-staff-text');
+    const activeStaffText = document.getElementById('active-staff-text');
+    const activeStaff = 0;
+
+    // Add event listener to the "non-aktif-tab"
+    const nonAktifTab = document.getElementById('non-aktif-tab');
+    nonAktifTab.addEventListener('click', function() {
+        inactiveStaffText.style.display = 'none'; // Hide the text
+        activeStaffText.style.display = 'block'; // Show the text
+    });
+
+    // Add event listener to the "aktif-tab"
+    const aktifTab = document.getElementById('aktif-tab');
+    aktifTab.addEventListener('click', function() {
+    if (activeStaff === 0) {
+        inactiveStaffText.style.display = 'block'; // Show the text
+        activeStaffText.style.display = 'none'; // Hide the text
+
+    }
+    });
+    
+
+
+
+</script>
 @endsection

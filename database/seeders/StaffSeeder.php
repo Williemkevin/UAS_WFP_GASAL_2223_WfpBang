@@ -46,7 +46,6 @@ class StaffSeeder extends Seeder
                 'birthdate' => $birthdate[$i],
                 'phone' => $phone[$i],
                 'address' => $address[$i],
-                'status' => 1,
                 'gender' => $gender[$i],
                 'hired' => now(),
                 'created_at' => now(),

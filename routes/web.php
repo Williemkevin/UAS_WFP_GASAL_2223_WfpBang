@@ -77,7 +77,7 @@ Route::get('/', function () {
     } else if ($user && $user->hasRole('staff')) {
         return redirect()->route('staff.dashboard.index');
     } else {
-        return view('home');
+        return view('welcome');
     }
 });
 

@@ -55,14 +55,6 @@
                                                 <option value="female">Female</option>
                                             </select>
                                         </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="basic-default-fullname">Status</label>
-                                            <select class="form-select" aria-label="Default select example" name="status" id="type">
-                                                <option>-- Pilih Status --</option>
-                                                <option value="1">1</option>
-                                                <option value="0">0</option>
-                                            </select>
-                                        </div>
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                         <a class="btn btn-primary" href={{ route('admin.staff.index') }}>Daftar Staff</a>
                                     </form>

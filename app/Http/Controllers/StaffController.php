@@ -20,12 +20,14 @@ class StaffController extends Controller
     {
         //
         $user_staffs = DB::table('users')
-        ->join('staffs', 'users.id', '=', 'staffs.user_id')
-        ->select('users.*', 'staffs.*')
-        ->get();
+            ->join('staffs', 'users.id', '=', 'staffs.user_id')
+            ->select('users.*', 'staffs.*')
+            ->whereNull('staffs.deleted_at')
+            ->get();
 
-        $softDeletedStaffs = Staff::withTrashed()
-        ->onlyTrashed()
+        $softDeletedStaffs = Staff::onlyTrashed()
+        ->with(['user' => function ($query) {
+            $query->withTrashed();}])
         ->get();
 
         return view('staff.index', [
@@ -64,7 +66,7 @@ class StaffController extends Controller
         // dd($validatedData);
         // User::create($validatedData);
 
-        return redirect()->route('admin.category.create')->with('msg', 'Produk baru berhasil ditambahkan!');
+        // return redirect()->route('admin.category.create')->with('msg', 'Produk baru berhasil ditambahkan!');
 
     }
 
@@ -88,13 +90,14 @@ class StaffController extends Controller
     public function edit($id)
     {
         //
-        $user_staffs = DB::table('users')
+        $staff = DB::table('users')
         ->join('staffs', 'users.id', '=', 'staffs.user_id')
         ->select('users.*', 'staffs.*')
+        ->where('staffs.id', '=', $id)
         ->get();
 
         return view('staff.edit', [
-            'user_staffs' => $user_staffs
+            'staff' => $staff
         ]);
     }
 
@@ -107,26 +110,42 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $staff = Staff::find($id);
+
+        $staff = Staff::with('user')->findOrFail($id);
+
+        // Check if the $staff or $staff->user is null
+        if (!$staff || !$staff->user) {
+            return redirect()->route('admin.staff.index')->with('success', 'Data User & Staff Tidak Valid!');
+        }
 
         $validatedData = $request->validate([
+            'username' => 'required|max:16',
+            'email' => 'required|max:255|email',
             'phone' => 'required|max:45',
             'address' => 'required|max:255'
         ]);
 
-        if ($staff->phone == $validatedData['phone'] && $staff->address == $validatedData['address']) {
-            // dd('same data');
+        if (
+            $staff->phone == $validatedData['phone'] &&
+            $staff->address == $validatedData['address'] &&
+            $staff->user->username == $validatedData['username'] &&
+            $staff->user->email == $validatedData['email']
+        ) {
             return redirect()->route('admin.staff.edit', ['staff' => $id])->with('msg', 'Tidak Ada Perubahan Data!');
         } else {
-            // dd('data changed');
-            $staff->category_name = $validatedData['category_name'];
-            $staff->description = $validatedData['description'];
+            $staff->phone = $validatedData['phone'];
+            $staff->address = $validatedData['address'];
 
-            Staff::where('id', $id)->update($validatedData);
+            // Update the user attributes
+            $staff->user->username = $validatedData['username'];
+            $staff->user->email = $validatedData['email'];
+            $staff->user->save();
 
-            return redirect()->route('admin.staff.index')->with('success', 'Kategori berhasil diperbaharui!');
+            $staff->save();
+
+            return redirect()->route('admin.staff.index')->with('success', 'Data Staff berhasil diperbaharui!');
         }
+
     }
 
     /**
@@ -141,24 +160,20 @@ class StaffController extends Controller
         // Find the staff by ID
         $staff = Staff::findOrFail($id);
 
-        // Delete the staff
+        // Delete the staff and the related users
         $staff->delete();
-
+        
         return redirect()->back()->with('success', 'Staff berhasil dihapus.');
     }
 
     public function restore($id)
     {
-        $staff = Staff::withTrashed()->findOrFail($id);
+        $staff = Staff::onlyTrashed()->findOrFail($id);
 
-        if ($staff->trashed()) {
-            $staff->restore();
+        $staff->restore();
 
-            // Perform any additional logic after restoring the category
-
-            return redirect()->back()->with('success', 'Staff berhasil dikembalikan.');
-        }
-        return redirect()->back()->with('success', 'Staff gagal dikembalikan.');
+        return redirect()->back()->with('success', 'Staff berhasil dikembalikan.');
+        // return redirect()->back()->with('success', 'Staff gagal dikembalikan.');
     }
 
     //mendaftarkan/store akun dengan role staff ke table user
@@ -209,7 +224,6 @@ class StaffController extends Controller
         $validatedData = $request->validate([
             'phone' => 'required|max:16',
             'address' => 'required|max:255',
-            'status' => 'required',
             'gender' => 'required',
             'hired' => 'required',
             'birthdate' => 'required',
