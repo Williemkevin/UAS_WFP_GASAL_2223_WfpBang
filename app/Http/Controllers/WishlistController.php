@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class WishlistController extends Controller
 {
@@ -13,7 +16,6 @@ class WishlistController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -23,7 +25,6 @@ class WishlistController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -32,9 +33,14 @@ class WishlistController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($produk, $buyer)
     {
-        //
+        $wishlist = new Wishlist();
+        $wishlist->product_id = $produk;
+        $wishlist->buyer_id = $buyer;
+        $wishlist->save();
+
+        return Redirect::route('product.index');
     }
 
     /**

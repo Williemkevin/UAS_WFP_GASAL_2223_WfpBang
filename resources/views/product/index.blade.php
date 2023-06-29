@@ -10,6 +10,8 @@
     </div>
 </div>
 
+{{-- @dd($productWishlist); --}}
+{{-- @dd($product); --}}
 
 @if (session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
@@ -33,6 +35,12 @@
                         <div class="text-center">
                             <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary"><i class='bx bx-edit-alt'></i></a>
                             <button onclick="nonaktifkan({{ $product->id }})" class="btn btn-sm btn-danger"><i class='bx bx-power-off'></i></button>
+
+                            @if (in_array($product->id, $productWishlist)) 
+                                <button onclick="removeWishlist({{ $product->id }})"><i class='bx bxs-heart' style="color: black;"></i></button>
+                            @else
+                                <button onclick="addWishlist({{ $product->id }})"><i class='bx bx-heart' style="color: black;"></i></button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -91,6 +99,38 @@
         $.ajax({
             type: 'POST',
             url: "{{ route('product.aktifkan')}}",
+            data: {
+                '_token': '<?php echo csrf_token(); ?>',
+                'id': id,
+            },
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    window.location.reload(true);
+                }
+            }
+        });
+    }
+
+    function addWishlist(id) {
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('product.addWishlist')}}",
+            data: {
+                '_token': '<?php echo csrf_token(); ?>',
+                'id': id,
+            },
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    window.location.reload(true);
+                }
+            }
+        });
+    }
+
+    function removeWishlist(id) {
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('product.removeWishlist')}}",
             data: {
                 '_token': '<?php echo csrf_token(); ?>',
                 'id': id,

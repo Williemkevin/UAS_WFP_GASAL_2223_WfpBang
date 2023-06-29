@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buyer;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductHasCategories;
 use App\Models\ProductsHasCategories;
 use App\Models\Type;
+use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class ProductController extends Controller
@@ -19,10 +22,15 @@ class ProductController extends Controller
      */
     public function index()
     {
+        $productWishlist = Wishlist::select('product_id')
+            ->join('buyers', 'buyers.id', '=', 'wishlists.buyer_id')
+            ->join('users', 'users.id', '=', 'buyers.user_id')
+            ->where('users.id', Auth::id())
+            ->get()->pluck('product_id')->toArray();
         $productAktif = Product::where('status', 'aktif')->get();
         $productNonAktif = Product::where('status', 'tidak aktif')->get();
 
-        return view('product.index', compact('productAktif', 'productNonAktif'));
+        return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist'));
     }
 
     /**
@@ -174,6 +182,24 @@ class ProductController extends Controller
         $data = Product::find($request->get('id'));
         $data->status = 'aktif';
         $data->save();
+        return response()->json(array('status' => 'success'), 200);
+    }
+
+    public function addWishlist(Request $request)
+    {
+        $buyerId = Buyer::where('user_id', Auth::id())->first();
+
+        $whislist = new Wishlist();
+        $whislist->buyer_id = $buyerId->id;
+        $whislist->product_id = $request->get('id');
+        $whislist->save();
+        return response()->json(array('status' => 'success'), 200);
+    }
+
+    public function removeWishlist(Request $request)
+    {
+        $buyerId = Buyer::where('user_id', Auth::id())->first();
+        Wishlist::where('product_id', $request->get('id'))->where('buyer_id', $buyerId->id)->delete();
         return response()->json(array('status' => 'success'), 200);
     }
 }
