@@ -32,14 +32,20 @@
                     </div>
                     <!-- Product actions-->
                     <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                        <div class="text-center">
-                            <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary"><i class='bx bx-edit-alt'></i></a>
-                            <button onclick="nonaktifkan({{ $product->id }})" class="btn btn-sm btn-danger"><i class='bx bx-power-off'></i></button>
+                        <div class="text-center" style="width: 110%;">
+                            @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
+                                <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-primary"><i class='bx bx-edit-alt'></i></a>
+                                <button onclick="nonaktifkan({{ $product->id }})" class="btn btn-sm btn-danger"><i class='bx bx-power-off'></i></button>
+                            @endif
 
-                            @if (in_array($product->id, $productWishlist)) 
-                                <button onclick="removeWishlist({{ $product->id }})"><i class='bx bxs-heart' style="color: black;"></i></button>
-                            @else
-                                <button onclick="addWishlist({{ $product->id }})"><i class='bx bx-heart' style="color: black;"></i></button>
+                            @if(str_contains(Auth::user()->role, 'buyer'))
+                                <button  style="border: none;"><i class='bx bx-cart'></i></button>
+                                @if (in_array($product->id, $productWishlist)) 
+                                    <button onclick="removeWishlist({{ $product->id }})" style="border: none;"><i class='bx bxs-heart' style="color: black;"></i></button>
+                                @else
+                                    <button onclick="addWishlist({{ $product->id }})" style="border: none;"><i class='bx bx-heart' style="color: black;"></i></button>
+                                @endif
+                                <button class="btn btn-sm btn-success"><i class='bx bx-detail'> Detail</i></button>
                             @endif
                         </div>
                     </div>
@@ -49,6 +55,7 @@
         </div>
     </div>
 
+    @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
     <div class="container px-2 px-lg-2   mt-2">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @foreach ($productNonAktif as $product)
@@ -73,6 +80,7 @@
             @endforeach
         </div>
     </div>
+    @endif
 </section>
 @endsection
 
