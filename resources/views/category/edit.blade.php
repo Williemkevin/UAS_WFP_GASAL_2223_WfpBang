@@ -12,7 +12,6 @@
                 </div>
 
                 <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-                        Owner!
                         Hello, {{ Auth::user()->role }}: {{ Auth::user()->name }} 
                         <ul class="navbar-nav flex-row align-items-center ms-auto">
                             
