@@ -21,8 +21,10 @@ class CreateBuyersTable extends Migration
             $table->string('address', 255);
             $table->enum('gender', ['male', 'female']);
             $table->double('balance', 8, 2)->default(0);
+            $table->enum('membership', ['1', '0'])->default(0);
             $table->integer('point')->default(0);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

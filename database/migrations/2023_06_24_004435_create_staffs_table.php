@@ -17,7 +17,6 @@ class CreateStaffsTable extends Migration
             $table->id();
             $table->string('name', 255);
             $table->date('birthdate');
-            $table->enum('status', ['1', '0']);
             $table->enum('gender', ['male', 'female']);
             $table->date('hired');
             $table->timestamps();

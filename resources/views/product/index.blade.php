@@ -20,8 +20,7 @@
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="{{asset('storage/app/' . $product->image_url)}}" alt="..." />
-                    {{-- // <img class="card-img-top" src="storage\app\product-image\product1.png" alt="..." /> --}}
+                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
 
                     <div class="card-body p-4">
                         <div class="text-center">

@@ -164,7 +164,7 @@ class ProductController extends Controller
     public function nonaktifkan(Request $request)
     {
         $data = Product::find($request->get('id'));
-        $data->status = '0';
+        $data->status = 'tidak aktif';
         $data->save();
         return response()->json(array('status' => 'success'), 200);
     }
@@ -172,7 +172,7 @@ class ProductController extends Controller
     public function aktifkan(Request $request)
     {
         $data = Product::find($request->get('id'));
-        $data->status = '1';
+        $data->status = 'aktif';
         $data->save();
         return response()->json(array('status' => 'success'), 200);
     }
