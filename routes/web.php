@@ -35,7 +35,7 @@ Route::post('product/addWishlist', [ProductController::class, 'addWishlist'])->n
 Route::post('product/removeWishlist', [ProductController::class, 'removeWishlist'])->name('product.removeWishlist');
 
 Route::resource('transaksi', TransaksiController::class);
-
+Route::get('transaksi/detail/{idTransaksi}', [TransaksiController::class, 'detailTransaksi'])->name('transaksi.detailTransaksi');
 
 // Owner Route
 Route::group(['middleware' => ['auth', 'role:owner'], 'prefix' => 'owner'], function () {

@@ -31,11 +31,9 @@ class TransaksiController extends Controller
             $bulan = Carbon::now()->month;
             $tahun = Carbon::now()->year;
         }
-        $transaksis = Transactions::join('products_has_transactions as THP', 'transactions.ID', '=', 'THP.transaction_id')
-            ->join('products as P', 'THP.product_id', '=', 'P.ID')
-            ->join('buyers as B', 'transactions.buyer_id', '=', 'B.ID')
+        $transaksis = Transactions::join('buyers as B', 'transactions.buyer_id', '=', 'B.ID')
             ->join('users as U', 'B.user_id', '=', 'U.ID')
-            ->select('transactions.*', 'THP.product_id', 'THP.price', 'THP.quantity', 'P.product_name', 'U.name')
+            ->select('transactions.*', 'U.*')
             ->whereRaw("MONTH(transactions.transaction_date) = $bulan")
             ->whereRaw("YEAR(transactions.transaction_date) = $tahun");
         if (Auth::user()->role == 'buyer') {
@@ -144,5 +142,16 @@ class TransaksiController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function detailTransaksi($idTransaksi)
+    {
+        $detailTransaksis = ProductsHasTransactions::join('products as p', 'products_has_transactions.product_id', '=', 'p.id')
+            ->join('transactions as t', 'products_has_transactions.transaction_id', '=', 't.id')
+            ->join('buyers as b', 't.buyer_id', '=', 'b.id')
+            ->select('products_has_transactions.*', 'p.*', 't.*', 'b.*')
+            ->where('t.id', $idTransaksi)
+            ->get();
+        return view('transaksi.detailTransaksi', compact('detailTransaksis'));
     }
 }

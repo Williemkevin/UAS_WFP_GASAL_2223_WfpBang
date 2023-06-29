@@ -9,7 +9,6 @@
         <a href="{{url('transaksi/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Transaksi</a>
     </div>
 </div>
-
 @if (session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
@@ -45,11 +44,10 @@
                     <th>No</th>
                     <th>Tanggal</th>
                     <th>Pembeli</th>
-                    <th>Produk</th>
-                    <th>Jumlah</th>
                     <th>Total</th>
                     <th>Pajak</th>
                     <th>Grand Total</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,11 +61,11 @@
                     <th>{{$loop->iteration}}</th>
                     <th>{{ \Carbon\Carbon::parse($transaksi->transaction_date)->format('d F Y') }}</th>
                     <th>{{$transaksi->name}}</th>
-                    <th>{{$transaksi->product_name}}</th>
-                    <th>{{$transaksi->quantity}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->total)}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->tax)}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->grand_total)}}</th>
+                    <td class="text-center"><button onclick="detailTransaksi({{ $transaksi->id}})" class="btn btn-sm btn-primary"><i class='bx bx-detail'></i></button>
+                    </td>
                 </tr>
                 @endforeach
                 @endif
@@ -89,6 +87,10 @@
         var bulanSelected = $("#bulan").val().split('-');
         window.location.href = '/transaksi/' + bulanSelected[0] + '/' + bulanSelected[1] ;
     });
+    function detailTransaksi(idTransaksi) {
+
+        window.location.href = 'transaksi/detail/' + idTransaksi ;
+    }
 </script>
 @endsection
 
