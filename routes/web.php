@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\KategoriController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ use App\Http\Controllers\WishlistController;
 Auth::routes();
 
 Route::resource('product', ProductController::class);
+Route::resource('buyer', BuyerController::class);
+
 
 Route::post('product/aktifkan', [ProductController::class, 'aktifkan'])->name('product.aktifkan');
 Route::post('product/nonaktifkan', [ProductController::class, 'nonaktifkan'])->name('product.nonaktifkan');

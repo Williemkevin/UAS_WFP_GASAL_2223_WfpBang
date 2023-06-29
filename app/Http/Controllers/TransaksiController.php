@@ -10,6 +10,7 @@ use App\Models\Transactions;
 use App\Models\Transaksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 
@@ -22,6 +23,10 @@ class TransaksiController extends Controller
      */
     public function index($bulan = null, $tahun = null)
     {
+        $idBuyer = Buyer::select('buyers.id')
+            ->join('users', 'users.id', '=', 'buyers.user_id')
+            ->where('users.id', Auth::id())
+            ->first();
         if ($bulan == null && $tahun == null) {
             $bulan = Carbon::now()->month;
             $tahun = Carbon::now()->year;
@@ -32,7 +37,11 @@ class TransaksiController extends Controller
             ->join('users as U', 'B.user_id', '=', 'U.ID')
             ->select('transactions.*', 'THP.product_id', 'THP.price', 'THP.quantity', 'P.product_name', 'U.name')
             ->whereRaw("MONTH(transactions.transaction_date) = $bulan")
-            ->whereRaw("YEAR(transactions.transaction_date) = $tahun")->get();
+            ->whereRaw("YEAR(transactions.transaction_date) = $tahun");
+        if (Auth::user()->role == 'buyer') {
+            $transaksis->where('B.user_id', Auth::user()->id);
+        }
+        $transaksis = $transaksis->get();
         return view('transaksi.index', compact('transaksis'));
     }
 
@@ -72,7 +81,6 @@ class TransaksiController extends Controller
         $transactions->save();
 
         $arrayProduk = json_decode($request->get('arrayProduk'), true);
-        // ddd($arrayProduk);
         if (empty($arrayProduk)) {
             return Redirect::back();
         } else {

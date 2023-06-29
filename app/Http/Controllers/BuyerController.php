@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buyer;
 use Illuminate\Http\Request;
 
 class BuyerController extends Controller
@@ -13,7 +14,11 @@ class BuyerController extends Controller
      */
     public function index()
     {
-        //
+        $members = Buyer::join('users as u', 'u.id', '=', 'buyers.user_id')
+            ->select('buyers.*', 'u.*')->where('buyers.membership', '1')->get();
+        $nonmembers = Buyer::join('users as u', 'u.id', '=', 'buyers.user_id')
+            ->select('buyers.*', 'u.*')->where('buyers.membership', '0')->get();
+        return view('buyer.index', compact('members', 'nonmembers'));
     }
 
     /**

@@ -53,7 +53,7 @@
       </li>
 
       <li class="menu-item">
-        <a href="tables-basic.html" class="menu-link">
+        <a href="{{ url('buyer') }} " class="menu-link">
           <i class="menu-icon tf-icons bx bx-user"></i>
           <div data-i18n="Tables">Pembeli</div>
         </a>
