@@ -19,8 +19,7 @@
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-
+                    <img class="card-img-top" src="{{asset('storage/'. $product->image_url)}}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>
@@ -37,12 +36,39 @@
 
                             @if(str_contains(Auth::user()->role, 'buyer'))
                                 <button  style="border: none;"><i class='bx bx-cart'></i></button>
-                                @if (in_array($product->id, $productWishlist)) 
+                                @if (in_array($product->id, $productWishlist))
                                     <button onclick="removeWishlist({{ $product->id }})" style="border: none;"><i class='bx bxs-heart' style="color: black;"></i></button>
                                 @else
                                     <button onclick="addWishlist({{ $product->id }})" style="border: none;"><i class='bx bx-heart' style="color: black;"></i></button>
                                 @endif
-                                <button class="btn btn-sm btn-success"><i class='bx bx-detail'> Detail</i></button>
+                                <a class="btn btn-sm btn-success" data-bs-toggle="modal" href="#showdetail_{{$product->id}}"><i class='bx bx-detail'>Detail</i></a>
+                                <div class="modal fade" id="showdetail_{{$product->id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                            <div class="text-center">
+                                                <h5 class="modal-title" id="exampleModalLabel">Product Detail</h5>
+                                            </div>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card h-80">
+                                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+
+                                                <div class="card-body p-4">
+                                                    <div class="text-center">
+                                                        <h5 class="fw-bolder">{{ $product->product_name }}</h5>
+                                                        Price : {{ App\Http\Controllers\ProductController::rupiah($product->price)}}<br>
+                                                        Stok tersedia : {{$product->stock}} {{$product->dimension}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                             @endif
                         </div>
                     </div>
@@ -79,6 +105,9 @@
     </div>
     @endif
 </section>
+
+
+
 @endsection
 
 
