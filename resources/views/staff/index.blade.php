@@ -294,7 +294,6 @@
     if (activeStaff === 0) {
         inactiveStaffText.style.display = 'block'; // Show the text
         activeStaffText.style.display = 'none'; // Hide the text
-
     }
     });
     
