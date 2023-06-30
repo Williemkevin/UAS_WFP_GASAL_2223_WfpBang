@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\laporanController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OwnerController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\StaffController;
 use App\Http\Controllers\TipeController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\WishlistController;
+use App\Models\Product;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,6 +87,8 @@ Route::get('/', function () {
         return redirect()->route('owner.dashboard.index');
     } else if ($user && $user->hasRole('staff')) {
         return redirect()->route('staff.dashboard.index');
+    } else if ($user && $user->hasRole('buyer')) {
+        return redirect()->to('/product');
     } else {
         return redirect()->route('login');
     }
@@ -94,3 +98,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/transaksi/{bulan?}/{tahun?}', [TransaksiController::class, 'index'])->name('transaksi.index');
 
 Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
+
+Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
+
+Route::get('/laporan/produk', [laporanController::class, 'laporanproduk'])->name('laporan.produk');
