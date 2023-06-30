@@ -65,9 +65,18 @@
           <div data-i18n="Tables">Poin</div>
         </a>
       </li>
+      @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+        <li class="{{ (request()->is('admin/type*')) ? 'menu-item active': 'menu-item'}}">
+          <a href={{ route('laporan.produk') }} class="menu-link">
+            <i class="menu-icon tf-icons bx bxs-report"></i>
+            <div data-i18n="Boxicons">Laporan </div>
+          </a>
+        </li>
+        @endif
+      @endauth
 
       @auth
-
         <li class="{{ (request()->is('logout*')) ? 'menu-item active': 'menu-item'}}">
           <a  href="{{ route('logout') }}" class="menu-link"
               onclick="event.preventDefault();
@@ -87,8 +96,5 @@
           </a>
         </li>
       @endauth
-
-
-
     </ul>
   </aside>

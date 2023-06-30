@@ -101,4 +101,4 @@ Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])
 
 Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
 
-Route::get('/laporan/produk', [laporanController::class, 'laporanproduk'])->name('laporan.produk');
+Route::get('/laporan/produk/{bulan?}/{tahun?}/{filter?}', [laporanController::class, 'laporanproduk'])->name('laporan.produk');
