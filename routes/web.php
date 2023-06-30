@@ -31,6 +31,8 @@ Route::resource('buyer', BuyerController::class);
 Route::post('product/aktifkan', [ProductController::class, 'aktifkan'])->name('product.aktifkan');
 Route::post('product/nonaktifkan', [ProductController::class, 'nonaktifkan'])->name('product.nonaktifkan');
 
+Route::post('product/showDetail', [ProductController::class, 'showDetail'])->name('product.showDetail');
+
 Route::post('product/addWishlist', [ProductController::class, 'addWishlist'])->name('product.addWishlist');
 Route::post('product/removeWishlist', [ProductController::class, 'removeWishlist'])->name('product.removeWishlist');
 
