@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buyer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BuyerController extends Controller
 {
@@ -86,4 +87,36 @@ class BuyerController extends Controller
     {
         //
     }
+
+    public function getmember(){
+        //
+        //Display all category & soft deleted
+        $nonMembers =
+            DB::table('users')
+            ->join('buyers', 'users.id', '=', 'buyers.user_id')
+            ->select('users.*', 'buyers.*')
+            ->where('buyers.membership', '=', '0')
+            ->get();
+
+        $members =
+            DB::table('users')
+            ->join('buyers', 'users.id', '=', 'buyers.user_id')
+            ->select('users.*', 'buyers.*')
+            ->where('buyers.membership', '=', '1')
+            ->get();
+
+        return view(
+            'owner.list-membership',
+            [
+                'nonMembers' => $nonMembers,
+                'members' => $members
+            ]
+        );
+    }
+
+    public function updatemembership($memberId, $command)
+    {
+        
+    }
+
 }

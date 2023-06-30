@@ -31,8 +31,8 @@ class AppServiceProvider extends ServiceProvider
             $totalStaff = DB::table('staffs')->count();
             $totalIncomes = DB::table('transactions')->sum('total');
             $totalProductsSold = DB::table('products_has_transactions')->sum('quantity');
-            
-            $view->with(compact('totalTransactions', 'totalStaff', 'totalIncomes', 'totalProductsSold'));
+            $totalBuyer = DB::table('buyers')->count();
+            $view->with(compact('totalTransactions', 'totalStaff', 'totalIncomes', 'totalProductsSold', 'totalBuyer'));
         });
     }
 }
