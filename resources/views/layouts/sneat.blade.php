@@ -75,7 +75,7 @@
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
-    
+
     {{-- <script src="../assets/js/config.js"></script> --}}
     <script src="{{ asset('assets/js/config.js') }}"></script>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -133,12 +133,13 @@
 
     <!-- Main JS -->
     <script src="{{ asset('../assets/js/main.js') }}"></script>
-    
+
 
     <!-- Page JS -->
     <script src="{{ asset('assets/js/dashboards-analytics.js') }}"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
+    <script src="{{ asset('assets/DataTables/datatables.js') }}"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     @yield('script')
   </body>
