@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class OwnerController extends Controller
@@ -16,11 +17,33 @@ class OwnerController extends Controller
     {
         //
         $user = Auth::user();
+        $monthsOrder = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ];
 
+
+        $totalIncomeByMonth = DB::table('transactions')
+        ->select(DB::raw("MONTHNAME(transaction_date) AS month"), DB::raw("SUM(total) AS total_income"))
+        ->groupBy('month')
+        ->orderByRaw("FIELD(MONTHNAME(transaction_date), '" . implode("', '", $monthsOrder) . "')")
+        ->get();
+        
         if ($user->role === 'owner') {
             // Logic for owner role
             return view('owner.index',[
-                'user' => $user
+                'user' => $user,
+                'totalIncomeByMonth' => $totalIncomeByMonth
             ]);
         }
     }
