@@ -27,8 +27,8 @@ class ProductController extends Controller
             ->join('users', 'users.id', '=', 'buyers.user_id')
             ->where('users.id', Auth::id())
             ->get()->pluck('product_id')->toArray();
-        $productAktif = Product::where('status', 'aktif')->get();
-        $productNonAktif = Product::where('status', 'tidak aktif')->get();
+        $productAktif = Product::where('status', 'aktif')->paginate(12);
+        $productNonAktif = Product::where('status', 'tidak aktif')->paginate(4);
 
         return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist'));
     }
