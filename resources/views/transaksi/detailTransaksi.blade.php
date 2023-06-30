@@ -1,21 +1,12 @@
 @extends('layouts.sneat')
 
-@section('content')
-<div class="portlet-title">
-    <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
-        List Transaksi
-    </div>
-    <div style="float: right; margin: 15px;">
-        <a href="{{url('transaksi/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Transaksi</a>
-    </div>
-</div>
 @if (session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 @section('content')
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
-        Transaksi
+        Detail Transaksi
     </div>
 </div>
       <div class="container">
@@ -30,7 +21,6 @@
                 </div>
             </div>
         
-        <h2>Keranjang Belanja</h2>
         <table class="table">
           <thead>
             <tr>
@@ -45,25 +35,25 @@
           <tr>
               <th>{{ $loop->iteration}}</th>
               <th>{{ $detailTransaksi->product_name }}</th>
-              <th>{{ $detailTransaksi->price }}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->price)}}</th>
               <th>{{ $detailTransaksi->quantity }}</th>
-              <th>{{ $detailTransaksi->total }}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->total)}}</th>
           </tr>
           @endforeach
             <tr>
               <th></th><th></th><th></th>
               <th>Sub Total : </th>
-              <th>{{ $detailTransaksis[0]->total }}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->total)}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
               <th>Pajak : </th>
-              <th>{{ $detailTransaksis[0]->tax }}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->tax)}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
               <th>Grand Total : </th>
-              <th>{{ $detailTransaksis[0]->grand_total }}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->grand_total)}}</th>
             </tr>
         </table>
     </form>

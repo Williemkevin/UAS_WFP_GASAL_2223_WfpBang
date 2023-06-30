@@ -44,6 +44,7 @@
                     <th>No</th>
                     <th>Tanggal</th>
                     <th>Pembeli</th>
+                    <th>Point</th>
                     <th>Total</th>
                     <th>Pajak</th>
                     <th>Grand Total</th>
@@ -61,6 +62,7 @@
                     <th>{{$loop->iteration}}</th>
                     <th>{{ \Carbon\Carbon::parse($transaksi->transaction_date)->format('d F Y') }}</th>
                     <th>{{$transaksi->name}}</th>
+                    <th>{{$transaksi->get_point}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->total)}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->tax)}}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($transaksi->grand_total)}}</th>
@@ -88,8 +90,7 @@
         window.location.href = '/transaksi/' + bulanSelected[0] + '/' + bulanSelected[1] ;
     });
     function detailTransaksi(idTransaksi) {
-
-        window.location.href = 'transaksi/detail/' + idTransaksi ;
+        window.location.href = '/transaksi/detail/' + idTransaksi ;
     }
 </script>
 @endsection
