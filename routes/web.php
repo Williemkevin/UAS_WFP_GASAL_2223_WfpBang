@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
 
     //list member & non member route
     Route::get('/memberlist', [BuyerController::class, 'getmember'])->name('admin.member.memberlist');
-    Route::get('/memberlist/{memberId}/{command}', [BuyerController::class, 'updatemembership'])->name('admin.member.updatemembership');
+    Route::post('/memberlist/update', [BuyerController::class, 'updatemembership'])->name('admin.member.updatemembership');
 });
 
 

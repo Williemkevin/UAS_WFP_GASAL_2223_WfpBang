@@ -57,7 +57,9 @@
                                                     <th>Username</th>
                                                     <th>Email</th>
                                                     <th>Point</th>
-                                                    <th>Status</th>
+                                                    @if (Auth::user()->role == 'owner' )
+                                                        <th>Status</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody class="table-border-bottom-0">
@@ -67,18 +69,20 @@
                                                         <td>{{ $member->username }}</td>
                                                         <td>{{ $member->email }}</td>
                                                         <td>{{ $member->point }}</td>
-                                                        @if ($member->membership == 1)
-                                                            <td>
-                                                                <a data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $member->id }}" class="btn btn-danger text-white">
-                                                                    Hapus Member
-                                                                </a>
-                                                            </td>
-                                                        @else
-                                                            <td>
-                                                                <a href="/" class="btn btn-success ">
-                                                                    Tambah Member
-                                                                </a>
-                                                            </td>
+                                                        @if (Auth::user()->role == 'owner')
+                                                            @if ($member->membership == 1)
+                                                                <td>
+                                                                    <a data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $member->id }}" class="btn btn-danger text-white">
+                                                                        Hapus Member
+                                                                    </a>
+                                                                </td>
+                                                            @else
+                                                                <td>
+                                                                    <a href="/" class="btn btn-success ">
+                                                                        Tambah Member
+                                                                    </a>
+                                                                </td>
+                                                            @endif
                                                         @endif
                                                     </tr>
                                                     {{-- Modal --}}
@@ -133,7 +137,9 @@
                                                     <th>Username</th>
                                                     <th>Email</th>
                                                     <th>Point</th>
-                                                    <th>Status</th>
+                                                    @if (Auth::user()->role == 'owner')
+                                                        <th>Status</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody class="table-border-bottom-0">
@@ -143,18 +149,20 @@
                                                         <td>{{ $nonMember->username }}</td>
                                                         <td>{{ $nonMember->email }}</td>
                                                         <td>{{ $nonMember->point }}</td>
-                                                        @if ($nonMember->membership == 0)
-                                                            <td>
-                                                                <a data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $nonMember->id }}" class="btn btn-success text-dark">
-                                                                    Tambah Member
-                                                                </a>
-                                                            </td>
-                                                        @else
-                                                            <td>
-                                                                <a href="/" class="btn btn-success">
-                                                                    Hapus Member
-                                                                </a>
-                                                            </td>
+                                                        @if (Auth::user()->role == 'owner')
+                                                            @if ($nonMember->membership == 0)
+                                                                <td>
+                                                                    <a data-bs-toggle="modal" data-bs-target="#modalCenter-{{ $nonMember->id }}" class="btn btn-success text-dark">
+                                                                        Tambah Member
+                                                                    </a>
+                                                                </td>
+                                                            @else
+                                                                <td>
+                                                                    <a href="/" class="btn btn-success">
+                                                                        Hapus Member
+                                                                    </a>
+                                                                </td>
+                                                            @endif
                                                         @endif
                                                         {{-- <td>{{ $nonMember->membership }}</td> --}}
                                                     </tr>
@@ -183,7 +191,7 @@
                                                                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                                         Tidak
                                                                     </button>
-                                                                    <button type="button" class="btn btn-primary" data-membership-id="{{ $nonMember->id }}">Ya</button>
+                                                                    <button type="button" class="btn btn-primary" data-membership-id="{{ $nonMember->id }}" data-command-member="ADD-MEMBER">Ya</button>
                                                                 </div>
                                                                 </div>
                                                             </div>
@@ -203,29 +211,55 @@
             </div>
             {{-- <div id="myElement">Hello, jQuery!</div> --}}
     </div>
+
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successModalLabel">Success</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Membership updated successfully.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 </section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
     //Remove Member
     $(document).ready(function() {
-        $('body').on('click', 'button[data-command-member="REMOVE-MEMBER"]', function() {
+        $('body').on('click', 'button[data-command-member]', function() {
             var memberId = $(this).data('membership-id');
             var command = $(this).data('command-member');
-            console.log(command);
-            console.log(memberId);
+            // console.log(memberId);
+
             $.ajax({
-                url: '/your-ajax-endpoint',
+                url: '{{ route("admin.member.updatemembership") }}',
                 type: 'POST',
                 data: {
                     memberId: memberId,
                     command: command
                 },
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
                 success: function(response) {
-                    // Handle the success response
+                    // alert('Berhasil');
+                    $('.modal').modal('hide');
+                    $('#successModal').modal('show');
+
+                    setTimeout(function() {
+                        location.reload(); 
+                    }, 2000); 
                 },
                 error: function(xhr, status, error) {
-                    // Handle the error response
+                    alert(error);
                 }
             });
         });

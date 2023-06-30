@@ -114,9 +114,23 @@ class BuyerController extends Controller
         );
     }
 
-    public function updatemembership($memberId, $command)
+    public function updatemembership(Request $request)
     {
+        // Retrieve the memberId and command from the request
+        $memberId = $request->input('memberId');
+        $command = $request->input('command');
         
+        if($command == 'REMOVE-MEMBER'){
+
+            DB::table('buyers')
+                ->where('id', $memberId)
+                ->update(['membership' => '0']);
+        }
+        else{
+            DB::table('buyers')
+                ->where('id', $memberId)
+                ->update(['membership' => '1']);
+        }
     }
 
 }
