@@ -4,6 +4,8 @@
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         List Product
+        {{-- {{ session()->flush() }}
+        {{ print_r(session()->all()) }} --}}
     </div>
     <div style="float: right; margin: 15px;">
         <a href="{{url('product/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Produk</a>
@@ -19,7 +21,7 @@
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="{{asset('storage/'. $product->image_url)}}" alt="..." />
+                    <img class="card-img-top" src="{{'storage/app/'. $product->image_url}}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>
@@ -35,7 +37,7 @@
                             @endif
 
                             @if(str_contains(Auth::user()->role, 'buyer'))
-                                <button  style="border: none;"><i class='bx bx-cart'></i></button>
+                                <button onclick="addCart({{ $product->id }})" style="border: none;"><i class='bx bx-cart'></i></button>
                                 @if (in_array($product->id, $productWishlist))
                                     <button onclick="removeWishlist({{ $product->id }})" style="border: none;"><i class='bx bxs-heart' style="color: black;"></i></button>
                                 @else
@@ -181,6 +183,22 @@
             success: function (data) {
                 if (data['status'] == 'success') {
                     window.location.reload(true);
+                }
+            }
+        });
+    }
+
+    function addCart(id) {
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('addToCart')}}",
+            data: {
+                '_token': '<?php echo csrf_token(); ?>',
+                'id': id,
+            },
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    alert('Horrey Product telah ditambah');
                 }
             }
         });

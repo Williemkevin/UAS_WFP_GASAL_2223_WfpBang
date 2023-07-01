@@ -65,6 +65,13 @@
           <div data-i18n="Tables">Poin</div>
         </a>
       </li>
+
+      <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
+        <a href="{{ url('cart') }}" class="menu-link">
+          <i class="menu-icon tf-icons bx bx-cart"></i>
+          <div data-i18n="Tables">Cart</div>
+        </a>
+      </li>
       @auth
         @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
         <li class="{{ (request()->is('admin/type*')) ? 'menu-item active': 'menu-item'}}">

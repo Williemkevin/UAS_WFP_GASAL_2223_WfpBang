@@ -202,4 +202,69 @@ class ProductController extends Controller
         Wishlist::where('product_id', $request->get('id'))->where('buyer_id', $buyerId->id)->delete();
         return response()->json(array('status' => 'success'), 200);
     }
+
+    public function cart()
+    {
+        return view('product.cart');
+    }
+
+    public function addToCart(Request $request)
+    {
+        $id = $request->get('id');
+        $product = Product::find($id);
+        $cart = session()->get('cart');
+
+        if (!isset($cart[$id])) {
+            $cart[$id] = [
+                "idProduk" => $product->id,
+                "name" => $product->product_name,
+                "quantity" => 1,
+                "price" => $product->price,
+                "image" => $product->image_url,
+                "stock" => $product->stock
+            ];
+        } else {
+            $cart[$id]["quantity"]++;
+        }
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Horrey Product telah ditambah');
+    }
+
+    public function removeProductCart(Request $request)
+    {
+        $id = $request->get('id');
+        $cart = session()->get('cart');
+
+        foreach ($cart as $key => $item) {
+            if ($item['idProduk'] == $id) {
+                unset($cart[$key]);
+                break;
+            }
+        }
+        session()->put('cart', $cart);
+        session()->save();
+        return redirect()->back()->with('success', 'Horrey Product telah ditambah');
+    }
+
+    public function updateQuantity(Request $request)
+    {
+        $id = $request->get('id');
+        $quantity = $request->get('quantity');
+        $cart = session()->get('cart');
+
+        $stockGudang = Product::select('stock')->where('id', 1)->first();
+        foreach ($cart as $key => $item) {
+            if ($item['idProduk'] == $id) {
+                if ($quantity <= $stockGudang->stock) {
+                    $cart[$key]['quantity'] = $quantity;
+                } else {
+                    $cart[$key]['quantity'] = $stockGudang->stock;
+                }
+                break;
+            }
+        }
+        session()->put('cart', $cart);
+        session()->save();
+        return redirect()->back()->with('status', 'success');
+    }
 }
