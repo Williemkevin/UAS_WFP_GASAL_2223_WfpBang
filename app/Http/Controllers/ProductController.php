@@ -227,7 +227,7 @@ class ProductController extends Controller
             $cart[$id]["quantity"]++;
         }
         session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Horrey Product telah ditambah');
+        return redirect()->back()->with(['status' => 'success', 'message' => 'Horrey Product telah ditambah']);
     }
 
     public function removeProductCart(Request $request)
@@ -243,7 +243,7 @@ class ProductController extends Controller
         }
         session()->put('cart', $cart);
         session()->save();
-        return redirect()->back()->with('success', 'Horrey Product telah ditambah');
+        return redirect()->back()->with(['status' => 'success', 'message' => 'Produk berhasil dihapus']);
     }
 
     public function updateQuantity(Request $request)

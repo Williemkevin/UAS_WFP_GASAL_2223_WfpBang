@@ -86,7 +86,7 @@
                     class="form-control @error('email') is-invalid @enderror"
                     id="email"
                     name="email"
-                    placeholder="Enter your username"
+                    placeholder="Enter your email address"
                     value="{{ old('email') }}" required autocomplete="email"
                     autofocus
                   />
@@ -108,7 +108,7 @@
                     <input
                       type="password"
                       id="password"
-                      class="form-control @error('password') is-invalid @enderror" 
+                      class="form-control @error('password') is-invalid @enderror"
                       name="password"
                       placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                       aria-describedby="password"

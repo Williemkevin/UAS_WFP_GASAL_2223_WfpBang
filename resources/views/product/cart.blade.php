@@ -30,6 +30,7 @@
             </div>
         @endforeach
     </div>
+    <button type="button" class="btn btn-primary" onclick="doChechout()">Checkout</button>
 @endsection
 
 @section('script')
@@ -62,6 +63,13 @@
                 window.location.reload(true);
             }
         });
+    }
+
+    function doCheckout(){
+        for(val i=0;i<session('cart');i++){
+            if($("#quantity{{ $details['idProduk'] }}").val()>;)
+        }
+        alert("Thank you for your purchase!");
     }
 </script>
 @endsection
