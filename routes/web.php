@@ -80,6 +80,11 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
     //list member & non member route
     Route::get('/memberlist', [BuyerController::class, 'getmember'])->name('admin.member.memberlist');
     Route::post('/memberlist/update', [BuyerController::class, 'updatemembership'])->name('admin.member.updatemembership');
+
+    //list produk terjual
+    Route::get('/productsold', [ProductController::class, 'productsold'])->name('admin.product.productsold');
+    Route::get('/productsold/{bulan?}/{tahun?}/{filter?}', [ProductController::class, 'productsoldfiltered'])->name('admin.product.productsoldfiltered');
+
 });
 
 

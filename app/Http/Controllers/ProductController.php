@@ -2,16 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Buyer;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\ProductHasCategories;
-use App\Models\ProductsHasCategories;
 use App\Models\Type;
+use App\Models\Buyer;
+use App\Models\Product;
+use App\Models\Category;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Models\ProductHasCategories;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ProductsHasCategories;
 use Illuminate\Support\Facades\Redirect;
+use Carbon\Carbon;
+
+
 
 class ProductController extends Controller
 {
@@ -266,5 +270,39 @@ class ProductController extends Controller
         session()->put('cart', $cart);
         session()->save();
         return redirect()->back()->with('status', 'success');
+    }
+
+    public function productsold(){
+        $productSold = DB::table('products')
+        ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
+        ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
+        ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
+        ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
+        ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+        ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+        ->get();
+
+
+        return view('product.productSold', compact('productSold'));
+    }
+
+    public function productsoldfiltered($bulan = null, $tahun = null){
+        if ($bulan == null && $tahun == null) {
+            $bulan = Carbon::now()->month;
+            $tahun = Carbon::now()->year;
+        }
+        
+        $productSold = DB::table('products')
+        ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
+        ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
+        ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
+        ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
+        ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+        ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+        ->whereMonth('transactions.transaction_date', '=', $bulan)
+        ->whereYear('transactions.transaction_date', '=', $tahun)
+        ->get();
+        
+        return view('product.productSold', compact('productSold'));
     }
 }
