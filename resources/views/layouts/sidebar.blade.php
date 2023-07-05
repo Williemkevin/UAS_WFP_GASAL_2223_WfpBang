@@ -68,14 +68,14 @@
       </li>
       @endif
 
-      <li class="menu-item">
+      <li class="{{ (request()->is('poin*')) ? 'menu-item active': 'menu-item'}}">
         <a href="tables-basic.html" class="menu-link">
           <i class="menu-icon tf-icons bx bx-coin-stack"></i>
           <div data-i18n="Tables">Poin</div>
         </a>
       </li>
 
-      <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
+      <li class="{{ (request()->is('cart*')) ? 'menu-item active': 'menu-item'}}">
         <a href="{{ url('cart') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-cart"></i>
           <div data-i18n="Tables">Cart</div>
@@ -84,7 +84,7 @@
 
       @auth
         @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
-        <li class="{{ (request()->is('admin/type*')) ? 'menu-item active': 'menu-item'}} open">
+        <li class="{{ (request()->is('laporan/*')) ? 'menu-item active': 'menu-item'}} open">
           <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bxs-report"></i>
             <div data-i18n="Boxicons">Laporan </div>
