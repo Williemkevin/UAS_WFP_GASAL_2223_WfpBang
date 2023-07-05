@@ -21,7 +21,7 @@
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="{{'storage/app/'. $product->image_url}}" alt="..." />
+                    <img class="card-img-top" src="{{'images/'. $product->image_url}}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>

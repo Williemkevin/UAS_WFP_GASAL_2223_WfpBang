@@ -13,15 +13,17 @@
         Add New Product
     </div>
 </div>
-<form method="POST" action="{{route('product.update', $produk->id)}}">
-    @csrf
+<form method="POST" action="{{route('product.update', $produk->id)}}" enctype="multipart/form-data">
     @method("PUT")
+    @csrf
     <div class="form-group">
         <label for="exampleInputEmaill">Nama product :</label>
         <input type="text" name="namaProduct" class="form-control" id="namaProduct" aria-describedby="nameHelp" value={{$produk->product_name}}>
 
-        <label for="exampleInputEmaill">Image Url : </label>
-        <input type="text" name="imageProduct" class="form-control" id="imageProduct" aria-describedby="nameHelp" value={{$produk->image_url}}>
+        <div class="mb-3">
+            <label for="exampleInputEmaill">Image Url : </label>
+            <input class="form-control" type="file" id="image" name="image" value={{$produk->image_url}}>
+        </div>
 
         <label for="exampleInputEmaill">Price : </label>
         <input type="number" name="priceProduct" class="form-control" id="priceProduct" aria-describedby="nameHelp" value={{$produk->price}}>

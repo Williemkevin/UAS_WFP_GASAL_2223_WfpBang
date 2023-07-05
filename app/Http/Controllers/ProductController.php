@@ -60,7 +60,13 @@ class ProductController extends Controller
     {
         $produk = new Product();
         $produk->product_name = $request->get('namaProduct');
-        $produk->image_url = $request->file('image')->store('product-image');
+
+        $file=$request->file('image');
+        $imgFolder="images";
+        $imgFile=time()."_".$file->getClientOriginalName();
+        $file->move($imgFolder,$imgFile);
+        $produk->image_url=$imgFile;
+
         $produk->price = $request->get('priceProduct');
         $produk->stock = $request->get('stock');
         $produk->dimension = $request->get('dimesion');
@@ -128,7 +134,13 @@ class ProductController extends Controller
         $deleteProdukCategori = ProductsHasCategories::where('product_id', $id)->delete();
 
         $product->product_name = $request->get('namaProduct');
-        $product->image_url = $request->get('imageProduct');
+        
+        $file=$request->file('image');
+        $imgFolder="images";
+        $imgFile=time()."_".$file->getClientOriginalName();
+        $file->move($imgFolder,$imgFile);
+        $product->image_url=$imgFile;
+
         $product->price = $request->get('priceProduct');
         $product->stock = $request->get('stock');
         $product->dimension = $request->get('dimesion');

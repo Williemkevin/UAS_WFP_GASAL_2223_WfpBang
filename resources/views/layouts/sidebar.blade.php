@@ -59,12 +59,14 @@
         </a>
       </li>
 
+      @if (Auth::user()->hasRole('buyer'))
       <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
         <a href="{{ url('saldo') }} " class="menu-link">
           <i class="menu-icon tf-icons bx bx-money"></i>
           <div data-i18n="Tables">Saldo</div>
         </a>
       </li>
+      @endif
 
       <li class="menu-item">
         <a href="tables-basic.html" class="menu-link">
