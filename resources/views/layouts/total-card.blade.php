@@ -36,7 +36,7 @@
                 </div>
                 <div class="col">
                     <div class="card bg-primary text-white mb-3">
-                        <a href="/" style="display: block;">
+                        <a href="{{ route('admin.product.productsold') }}" style="display: block;">
                             <div class="btn btn-primary" style="width: 100%;">Total Produk Terjual</div>
                         </a>
                     <div class="card-body" style="text-align: center">
