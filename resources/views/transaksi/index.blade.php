@@ -5,9 +5,11 @@
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         List Transaksi
     </div>
+    @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
     <div style="float: right; margin: 15px;">
         <a href="{{url('transaksi/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Transaksi</a>
     </div>
+    @endif
 </div>
 @if (session('status'))
 <div class="alert alert-success">{{session('status')}}</div>

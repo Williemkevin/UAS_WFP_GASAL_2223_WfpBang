@@ -48,6 +48,7 @@ class LoginController extends Controller
         } elseif ($user->hasRole('staff')) {
             return redirect()->route('staff.dashboard.index');
         } else {
+            // dd($user);
             return redirect('/');
         }
     }

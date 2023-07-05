@@ -16,27 +16,27 @@
         </a>
       </li>
 
-      @auth
-        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+      {{-- @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff')) --}}
           <li class="{{ (request()->is('admin/category*')) ? 'menu-item active': 'menu-item'}}">
             <a href={{ route('admin.category.index') }} class="menu-link">
               <i class="menu-icon tf-icons bx bx-list-ul"></i>
               <div data-i18n="Basic">Kategori</div>
             </a>
           </li>
-        @endif
-      @endauth
+        {{-- @endif
+      @endauth --}}
 
-      @auth
-        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+      {{-- @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff')) --}}
         <li class="{{ (request()->is('admin/type*')) ? 'menu-item active': 'menu-item'}}">
           <a href={{ route('admin.type.index') }} class="menu-link">
             <i class="menu-icon tf-icons bx bx-purchase-tag"></i>
             <div data-i18n="Boxicons">Tipe </div>
           </a>
         </li>
-        @endif
-      @endauth
+        {{-- @endif
+      @endauth --}}
 
       <li class="{{ (request()->is('product*')) ? 'menu-item active': 'menu-item'}}"class="menu-item">
         <a href="{{ url('product') }}" class="menu-link">
@@ -52,15 +52,19 @@
         </a>
       </li>
 
-      <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
-        <a href="{{ url('buyer') }} " class="menu-link">
-          <i class="menu-icon tf-icons bx bx-user"></i>
-          <div data-i18n="Tables">Pembeli</div>
-        </a>
-      </li>
+    @auth
+        @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
+        <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
+            <a href="{{ url('buyer') }} " class="menu-link">
+            <i class="menu-icon tf-icons bx bx-user"></i>
+            <div data-i18n="Tables">Pembeli</div>
+            </a>
+        </li>
+        @endif
+    @endauth
 
       @if (Auth::user()->hasRole('buyer'))
-      <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
+      <li class="{{ (request()->is('saldo*') || request()->is('topUpSaldo*')) ? 'menu-item active': 'menu-item'}}">
         <a href="{{ url('saldo') }} " class="menu-link">
           <i class="menu-icon tf-icons bx bx-money"></i>
           <div data-i18n="Tables">Saldo</div>
@@ -68,19 +72,14 @@
       </li>
       @endif
 
-      <li class="{{ (request()->is('poin*')) ? 'menu-item active': 'menu-item'}}">
-        <a href="tables-basic.html" class="menu-link">
-          <i class="menu-icon tf-icons bx bx-coin-stack"></i>
-          <div data-i18n="Tables">Poin</div>
-        </a>
-      </li>
-
+      @if (Auth::user()->hasRole('buyer'))
       <li class="{{ (request()->is('cart*')) ? 'menu-item active': 'menu-item'}}">
         <a href="{{ url('cart') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-cart"></i>
           <div data-i18n="Tables">Cart</div>
         </a>
       </li>
+      @endif
 
       @auth
         @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
