@@ -318,14 +318,10 @@ class ProductController extends Controller
         return view('product.productSold', compact('productSold'));
     }
 
-    public function transaksiCreate()
+    public function setSessionJual()
     {
-        $products = Product::all();
-        $staffs = DB::table('staffs AS s')->join('users AS u', 's.user_id', '=', 'u.id')->select('s.id', 'u.name')->get();
-        $buyers = DB::table('buyers AS b')->join('users AS u', 'b.user_id', '=', 'u.id')->select('b.id', 'u.name')->get();
-
-
-        //return view('transaksi.create', compact('products', 'staffs', 'buyers'));
-        return view('transaksi.create', ["products" => $products, "staffs" => $staffs, "buyers" => $buyers]);
+        session()->put('statusJual', "Online");
+        session()->save();
+        return "success";
     }
 }

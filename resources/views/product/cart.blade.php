@@ -1,4 +1,7 @@
 @extends('layouts.sneat')
+@auth
+
+
 
 @section('content')
     <div class="portlet-title">
@@ -100,7 +103,18 @@
                     }
                 });
                 if (status == "success") {
-                    window.location = "./transaksi/create";
+                    $.ajax({
+                        type: "post",
+                        url: "{{ route('product.setSessionJual') }}",
+                        data: {
+                            '_token': '<?php echo csrf_token(); ?>'
+                        },
+                        success: function (response) {
+                            if(response == "success")
+                            window.location = "./transaksi/create";
+                        }
+                    });
+
                 }
             }
         }

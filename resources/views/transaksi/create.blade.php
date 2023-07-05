@@ -25,21 +25,36 @@
                     </div>
                     <div class="d-flex align-items-center" style="margin-top: 20px;">
                       <h5 class="card-title mb-0" style="margin-right: 60px;">Staff</h5>
+                      @if (session('statusJual')=="Online")
+                        <div class="mb-3">
+                          <input type="text" name="namaStaff"
+                            id="namaStaff" class="form-control" value="Online" aria-describedby="helpId" disabled>
+                        </div>
+                      @else
                       <select class="form-select" aria-label="Default select example" name="namaStaff" id="namaStaff">
                         <option>-- Pilih Staff --</option>
                         @foreach ($staffs as $staff)
                         <option value="{{ $staff->id }}">{{$staff->name}}</option>
                         @endforeach
-                    </select>
+                      </select>
+                      @endif
                     </div>
                     <div class="d-flex align-items-center" style="margin-top: 20px;">
                       <h5 class="card-title mb-0" style="margin-right: 20px;">Customer</h5>
-                      <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer">
-                        <option>-- Pilih Customer --</option>
-                        @foreach ($buyers as $buyer)
-                        <option value="{{ $buyer->id }}">{{$buyer->name}}</option>
-                        @endforeach
-                      </select>
+                      @if (str_contains(Auth::user()->role, 'buyer'))
+                        <div class="mb-3">
+                          <input type="text"
+                            class="form-control" name="namaCustomer" id="namaCustomer" value="{{ Auth::user()->name }}" aria-describedby="helpId" disabled>
+                        </div>
+                        @else
+                        <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer">
+                            <option>-- Pilih Customer --</option>
+                            @foreach ($buyers as $buyer)
+                            <option value="{{ $buyer->id }}">{{$buyer->name}}</option>
+                            @endforeach
+                        </select>
+                        @endif
+
                     </div>
                   </div>
                 </div>
