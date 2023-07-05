@@ -118,3 +118,6 @@ Route::get('/cart', [ProductController::class, 'cart'])->name('produk.cart');
 Route::post('/addCart', [ProductController::class, 'addToCart'])->name('addToCart');
 Route::post('/removeProductCart', [ProductController::class, 'removeProductCart'])->name('removeProductCart');
 Route::post('/updateQuantity', [ProductController::class, 'updateQuantity'])->name('updateQuantity');
+
+Route::get('/saldo', [BuyerController::class, 'showSaldo'])->name('saldo');
+Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSaldo');

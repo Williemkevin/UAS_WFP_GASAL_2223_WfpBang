@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buyer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class BuyerController extends Controller
@@ -133,4 +134,20 @@ class BuyerController extends Controller
         }
     }
 
+    public function showSaldo()
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        return view('saldo.index', compact('buyer'));
+    }
+
+    public function topUpSaldo(Request $request)
+    {
+        $buyerTopUp = Buyer::where('user_id', Auth::user()->id)->first();
+        $buyerTopUp->balance = $buyerTopUp->balance + $request->saldo;
+        $buyerTopUp->save();
+
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+
+        return view('saldo.index',compact('buyer'))->with('msg', 'Top Up Saldo Berhasil');
+    }
 }
