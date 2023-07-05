@@ -102,6 +102,8 @@ Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])
 Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
 
 Route::get('/laporan/produk/{bulan?}/{tahun?}/{filter?}', [laporanController::class, 'laporanproduk'])->name('laporan.produk');
+Route::get('/laporan/pembeli/{filter?}', [laporanController::class, 'laporanpembeli'])->name('laporan.pembeli');
+
 
 Route::get('/cart', [ProductController::class, 'cart'])->name('produk.cart');
 Route::post('/addCart', [ProductController::class, 'addToCart'])->name('addToCart');

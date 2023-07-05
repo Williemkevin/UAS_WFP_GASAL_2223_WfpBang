@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Buyer;
 use App\Models\ProductsHasTransactions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -103,4 +104,22 @@ class laporanController extends Controller
         $laporanProdukResults = $laporanProduk->get();
         return view('laporan.laporanproduk', compact('laporanProdukResults'));
     }
+
+    public function laporanpembeli($filter = null)
+    {
+        $laporanPembeli =
+        DB::table('users')
+            ->join('buyers', 'users.id', '=', 'buyers.user_id')
+            ->select('users.*', 'buyers.*')
+            ->where('buyers.membership', '=', '1');
+        
+        if ($filter == 'PL') {
+            $laporanPembeli->orderBy('point', 'DESC');
+        } else if ($filter == 'KL') {
+            $laporanPembeli->orderBy('point', 'ASC');
+        }
+        $laporanPembeliResults = $laporanPembeli->get();
+        return view('laporan.laporanpembeli', compact('laporanPembeliResults'));
+    }
+
 }
