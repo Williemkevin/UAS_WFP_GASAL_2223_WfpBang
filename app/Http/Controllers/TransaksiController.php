@@ -55,8 +55,10 @@ class TransaksiController extends Controller
         $buyers = DB::table('buyers AS b')->join('users AS u', 'b.user_id', '=', 'u.id')->select('b.id', 'u.name')->get();
 
 
-        return view('transaksi.create', compact('products', 'staffs', 'buyers'));
+        //return view('transaksi.create', compact('products', 'staffs', 'buyers'));
+        return view('transaksi.create', ["products" => $products, "staffs" => $staffs, "buyers" => $buyers]);
     }
+
 
     /**
      * Store a newly created resource in storage.

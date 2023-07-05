@@ -43,7 +43,7 @@
                     </div>
                   </div>
                 </div>
-              
+
                 <div class="card" style="width: 30rem; margin-left: 15%;" >
                   <div class="card-body">
                     <div class="d-flex align-items-center">
@@ -66,7 +66,7 @@
                   </div>
                 </div>
             </div>
-        
+
         <h2>Keranjang Belanja</h2>
         <table class="table">
           <thead>
@@ -80,7 +80,7 @@
             </tr>
           </thead>
           <tbody id="bodyTabel">
-          
+
           </tbody>
             <tr>
               <th></th><th></th><th></th><th></th>
@@ -117,7 +117,12 @@
     $("#tanggalTransaksi").val(formattedDate);
 
     var arrayProduk = [];
-    
+
+    var session = JSON.parse('<?php echo json_encode(session("cart")) ?>');
+    $.each(session, function (key, value) {
+        arrayProduk.push(value);
+    });
+
     $("#btnTambah").click(function () {
         var products = <?php echo json_encode($products); ?>;
         var product = products.find(item => item.id == $("#namaProduk").val());
@@ -126,31 +131,43 @@
         var checkProduct = arrayProduk.find(item => item.id == product.id);
         if(checkProduct){
           checkProduct.jumlah += jumlah;
-          checkProduct.total = checkProduct.jumlah * checkProduct.harga; 
+          checkProduct.total = checkProduct.jumlah * checkProduct.harga;
         }else{
           var produk = {
             id: $("#namaProduk").val(),
-            namaProduk: product.product_name,
-            jumlah: jumlah,
-            harga:product.price,
+            name: product.product_name,
+            quantity: jumlah,
+            price:product.price,
             total:jumlah*product.price
           };
           arrayProduk.push(produk);
         }
         refreshTabel();
-    }); 
+    });
 
     function refreshTabel(){
       var count = 1;
+      var subtotal = 0;
       $("#bodyTabel").empty();
-      for (var i = 0; i < arrayProduk.length; i++) {
-          $("#bodyTabel").append('<tr id="barang' + arrayProduk[i].id +'"><td>'+ count +'</td><td>'+ arrayProduk[i].namaProduk+'</td><td>'+ arrayProduk[i].harga.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td>'+ arrayProduk[i].jumlah+'</td>'+
-              '<td>'+ parseFloat(arrayProduk[i].jumlah * arrayProduk[i].harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td><button type="button" class="btn btn-danger" onclick="hapusBarangKeranjang('+ arrayProduk[i].id +')">X</button></td></tr>');
+    //   for (var i = 0; i < arrayProduk.length; i++) {
+    //       $("#bodyTabel").append('<tr id="barang' + arrayProduk[i].id +'"><td>'+ count +'</td><td>'+ arrayProduk[i].namaProduk+'</td><td>'+ arrayProduk[i].harga.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td>'+ arrayProduk[i].jumlah+'</td>'+
+    //           '<td>'+ parseFloat(arrayProduk[i].jumlah * arrayProduk[i].harga).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td><button type="button" class="btn btn-danger" onclick="hapusBarangKeranjang('+ arrayProduk[i].id +')">X</button></td></tr>');
+    //       count++;
+    //   }
+      $.each(arrayProduk, function (key, value) {
+        $("#bodyTabel").append('<tr id="barang' + value["id"] +'"><td>'+ count +'</td><td>'+ value["name"]+'</td><td>'+ value["price"].toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td>'+ value["quantity"]+'</td>'+
+              '<td>'+ parseFloat(value["quantity"] * value["price"]).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td><button type="button" class="btn btn-danger" onclick="hapusBarangKeranjang('+ value["id"] +')">X</button></td></tr>');
           count++;
-      } 
-      $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+          subtotal+= parseFloat(value["quantity"] * value["price"]);
+      });
+      var pajak = subtotal*0.11;
+      var grand_total = subtotal + pajak;
+    //   $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+    //   $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+    //   $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#subtotal").text(subtotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#pajak").text(pajak.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#grandTotal").text(grand_total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     }
 
 
@@ -172,7 +189,7 @@
 
     function hapusBarangKeranjang(id){
         arrayProduk = arrayProduk.filter(item => item.id != id);
-        $("#barang" + id).remove(); 
+        $("#barang" + id).remove();
         refreshTabel();
     }
     refreshTabel();
