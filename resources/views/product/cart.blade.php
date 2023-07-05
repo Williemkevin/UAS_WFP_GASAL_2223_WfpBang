@@ -76,17 +76,22 @@
     }
 
     function doCheckout(){
-        let session = JSON.parse('<?php echo json_encode(session('cart')) ?>');
-        if (session){
+        const session_json = "{{ Session::get('cart') }}";
+        alert(session_json);
+
+        if (session_json){
             var status = "success";
 
+
             for(let i=0;i<session.length;i++){
-                alert($("#quantity" + session('cart')[i]["idProduk"]).val() + $("#stock" + session('cart')[i]["idProduk"]).val());
-                if($("#quantity" + session('cart')[i]["idProduk"]).val()>$("#stock" + session('cart')[i]["idProduk"]).val()){
-                    alert('Jumlah melebihi stok');
-                    status = "gagal";
-                    break;
-                }
+                var session_quantity_item = $("#quantity" + session[i]["idProduk"]).val();
+                var stock_item = $("#stock" + session[i]["idProduk"]).val();
+                alert(session_quantity_item + " - " + stock_item);
+                // if($("#quantity" + session('cart')[i]["idProduk"]).val()>$("#stock" + session('cart')[i]["idProduk"]).val()){
+                //     alert('Jumlah melebihi stok');
+                //     status = "gagal";
+                //     break;
+                // }
 
             }
             if(status == "success"){
