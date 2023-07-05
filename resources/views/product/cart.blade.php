@@ -100,16 +100,7 @@
                     }
                 });
                 if (status == "success") {
-                    $.ajax({
-                        type: 'GET',
-                        url: "{{ route('transaksi.create') }}",
-                        data: {
-
-                        },
-                        success: function(data) {
-
-                        }
-                    });
+                    window.location = "./transaksi/create";
                 }
             }
         }

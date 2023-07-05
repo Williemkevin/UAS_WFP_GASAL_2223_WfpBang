@@ -73,7 +73,7 @@ class TransaksiController extends Controller
         $transactions->total = $request->get('total');
         $transactions->tax = $request->get('tax');
         $transactions->grand_total = $request->get('grandtotal');
-        $transactions->get_point = $request->get('grandtotal') / 100;
+        $transactions->get_point = CEIL($request->get('grandtotal') / 100);
         // $transactions->redeem_point = $request->get('grandtotal');
         $transactions->buyer_id = $request->get('namaCustomer');
         $transactions->staff_id = $request->get('namaStaff');

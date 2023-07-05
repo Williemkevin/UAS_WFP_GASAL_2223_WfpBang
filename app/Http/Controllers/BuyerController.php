@@ -120,7 +120,7 @@ class BuyerController extends Controller
         // Retrieve the memberId and command from the request
         $memberId = $request->input('memberId');
         $command = $request->input('command');
-        
+
         if($command == 'REMOVE-MEMBER'){
 
             DB::table('buyers')
@@ -149,5 +149,10 @@ class BuyerController extends Controller
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
 
         return view('saldo.index',compact('buyer'))->with('msg', 'Top Up Saldo Berhasil');
+    }
+    public function showPoint()
+    {
+        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        return $buyer->point;
     }
 }

@@ -5,13 +5,17 @@
     <div class="container px-2 px-lg-2   mt-2">
             <div class="card">
                 <div class="demo-inline-spacing">
+                    @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
                     <a href={{ route('admin.type.create') }} class="btn rounded-pill btn-primary">
                         <iconify-icon icon="bx:plus"></iconify-icon>&nbsp; Tambah Tipe
                         {{-- <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Tambah Kategori --}}
                     </a>
+                    @endif
                 <div class="row">
                     <div class="col-xl-12">
                     <div class="nav-align-top mb-4">
+                        @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
+
                         <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
                             <button
@@ -42,6 +46,7 @@
                             </button>
                         </li>
                         </ul>
+                        @endif
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="navs-top-home" role="tabpanel">
                                 @if ($types->count() == 0)
@@ -59,7 +64,9 @@
                                             <tr>
                                                 <th>Nama</th>
                                                 <th>Deskripsi</th>
+                                                @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
                                                 <th>Actions</th>
+                                                @endif
                                             </tr>
                                             </thead>
                                             <tbody class="table-border-bottom-0">
@@ -70,6 +77,7 @@
                                                         {{ $type->description }}
                                                     </td>
                                                     <td>
+                                                    @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
                                                     <div class="dropdown">
                                                         <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                                         <i class="bx bx-dots-vertical-rounded"></i>
@@ -84,6 +92,7 @@
                                                             >
                                                         </div>
                                                     </div>
+                                                    @endif
                                                     </td>
                                                 </tr>
                                             <div>
@@ -199,7 +208,7 @@
                 </div>
             </div>
             {{-- <div id="myElement">Hello, jQuery!</div> --}}
-    </div> 
+    </div>
 </section>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -212,7 +221,7 @@
         // Loop through delete buttons
         deleteButtons.forEach(function(button) {
             button.addEventListener('click', function() {
-                
+
                 //get the ID
                 var typeId = $(this).data('type-id');
 
@@ -259,7 +268,7 @@
 
     }
     });
-    
+
 
 
 
