@@ -134,7 +134,7 @@ class ProductController extends Controller
         $deleteProdukCategori = ProductsHasCategories::where('product_id', $id)->delete();
 
         $product->product_name = $request->get('namaProduct');
-        
+
         $file=$request->file('image');
         $imgFolder="images";
         $imgFile=time()."_".$file->getClientOriginalName();
@@ -303,7 +303,7 @@ class ProductController extends Controller
             $bulan = Carbon::now()->month;
             $tahun = Carbon::now()->year;
         }
-        
+
         $productSold = DB::table('products')
         ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
         ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
@@ -314,7 +314,18 @@ class ProductController extends Controller
         ->whereMonth('transactions.transaction_date', '=', $bulan)
         ->whereYear('transactions.transaction_date', '=', $tahun)
         ->get();
-        
+
         return view('product.productSold', compact('productSold'));
+    }
+
+    public function transaksiCreate()
+    {
+        $products = Product::all();
+        $staffs = DB::table('staffs AS s')->join('users AS u', 's.user_id', '=', 'u.id')->select('s.id', 'u.name')->get();
+        $buyers = DB::table('buyers AS b')->join('users AS u', 'b.user_id', '=', 'u.id')->select('b.id', 'u.name')->get();
+
+
+        //return view('transaksi.create', compact('products', 'staffs', 'buyers'));
+        return view('transaksi.create', ["products" => $products, "staffs" => $staffs, "buyers" => $buyers]);
     }
 }

@@ -37,9 +37,7 @@ Route::post('product/showDetail', [ProductController::class, 'showDetail'])->nam
 
 Route::post('product/addWishlist', [ProductController::class, 'addWishlist'])->name('product.addWishlist');
 Route::post('product/removeWishlist', [ProductController::class, 'removeWishlist'])->name('product.removeWishlist');
-
-Route::post('cart/saveCart', [ProductController::class, 'saveCart'])->name('product.saveCart');
-
+Route::post('product/transaksiCreate', [ProductController::class, 'transaksiCreate'])->name("product.transaksiCreate");
 
 Route::resource('transaksi', TransaksiController::class);
 Route::get('transaksi/detail/{idTransaksi}', [TransaksiController::class, 'detailTransaksi'])->name('transaksi.detailTransaksi');
