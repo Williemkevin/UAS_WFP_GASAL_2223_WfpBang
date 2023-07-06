@@ -4,9 +4,8 @@
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         List Product
-        {{-- {{ session()->flush() }}
-        {{ print_r(session()->all()) }} --}}
     </div>
+
     @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
     <div style="float: right; margin: 15px;">
         <a href="{{url('product/create')}}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Produk</a>
@@ -18,6 +17,16 @@
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 <section>
+    <div style="margin: 15px; font-size: 15px; font-weight: bold;">
+        Filter : 
+        <select class="form-select" aria-label="Default select example" name="filterKategori" id="filterKategori">
+            <option value="all">-- Filter Category --</option>
+            @foreach ($kategoris as $kategori)
+                <option value="{{ $kategori->id }}">{{$kategori->category_name}}</option>
+            @endforeach
+        </select>
+    </div>
+
     <div class="container px-2 px-lg-2 mt-2">
         <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
             @foreach ($productAktif as $product)
@@ -160,7 +169,7 @@
 
     function addWishlist(id) {
         $.ajax({
-            type: 'POST',
+            type: 'GET',
             url: "{{ route('product.addWishlist')}}",
             data: {
                 '_token': '<?php echo csrf_token(); ?>',
@@ -205,6 +214,23 @@
             }
         });
     }
+
+    $("#filterKategori").on("change", function() {
+        var idCategori = $("#filterKategori").val();
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('product.index')}}",
+            data: {
+                '_token': '<?php echo csrf_token(); ?>',
+                'filterKategori': idCategori,
+            },
+            success: function (data) {
+                if (data['status'] == 'success') {
+                    alert('Horrey Product telah ditambah');
+                }
+            }
+        });
+    });
 </script>
 @endsection
 

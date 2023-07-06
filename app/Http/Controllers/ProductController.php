@@ -24,17 +24,23 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($filterKategori = "all")
     {
+        // dd($filterKategori);
+        $kategoris = Category::all();
         $productWishlist = Wishlist::select('product_id')
             ->join('buyers', 'buyers.id', '=', 'wishlists.buyer_id')
             ->join('users', 'users.id', '=', 'buyers.user_id')
             ->where('users.id', Auth::id())
             ->get()->pluck('product_id')->toArray();
-        $productAktif = Product::where('status', 'aktif')->paginate(12);
+        if ($filterKategori == 'all') {
+            $productAktif = Product::where('status', 'aktif')->paginate(12);
+        } else {
+            $productId = ProductsHasCategories::where('category_id', $filterKategori)->pluck('product_id');
+            $productAktif = Product::whereIn('id', $productId)->where('status', 'aktif')->paginate(12);
+        }
         $productNonAktif = Product::where('status', 'tidak aktif')->paginate(4);
-
-        return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist'));
+        return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist', 'kategoris'));
     }
 
     /**
@@ -61,11 +67,11 @@ class ProductController extends Controller
         $produk = new Product();
         $produk->product_name = $request->get('namaProduct');
 
-        $file=$request->file('image');
-        $imgFolder="images";
-        $imgFile=time()."_".$file->getClientOriginalName();
-        $file->move($imgFolder,$imgFile);
-        $produk->image_url=$imgFile;
+        $file = $request->file('image');
+        $imgFolder = "images";
+        $imgFile = time() . "_" . $file->getClientOriginalName();
+        $file->move($imgFolder, $imgFile);
+        $produk->image_url = $imgFile;
 
         $produk->price = $request->get('priceProduct');
         $produk->stock = $request->get('stock');
@@ -135,11 +141,11 @@ class ProductController extends Controller
 
         $product->product_name = $request->get('namaProduct');
 
-        $file=$request->file('image');
-        $imgFolder="images";
-        $imgFile=time()."_".$file->getClientOriginalName();
-        $file->move($imgFolder,$imgFile);
-        $product->image_url=$imgFile;
+        $file = $request->file('image');
+        $imgFolder = "images";
+        $imgFile = time() . "_" . $file->getClientOriginalName();
+        $file->move($imgFolder, $imgFile);
+        $product->image_url = $imgFile;
 
         $product->price = $request->get('priceProduct');
         $product->stock = $request->get('stock');
@@ -284,36 +290,38 @@ class ProductController extends Controller
         return redirect()->back()->with('status', 'success');
     }
 
-    public function productsold(){
+    public function productsold()
+    {
         $productSold = DB::table('products')
-        ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
-        ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
-        ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
-        ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
-        ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
-        ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
-        ->get();
+            ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
+            ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
+            ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
+            ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
+            ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+            ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+            ->get();
 
 
         return view('product.productSold', compact('productSold'));
     }
 
-    public function productsoldfiltered($bulan = null, $tahun = null){
+    public function productsoldfiltered($bulan = null, $tahun = null)
+    {
         if ($bulan == null && $tahun == null) {
             $bulan = Carbon::now()->month;
             $tahun = Carbon::now()->year;
         }
 
         $productSold = DB::table('products')
-        ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
-        ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
-        ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
-        ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
-        ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
-        ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
-        ->whereMonth('transactions.transaction_date', '=', $bulan)
-        ->whereYear('transactions.transaction_date', '=', $tahun)
-        ->get();
+            ->join('products_has_transactions', 'products.id', '=', 'products_has_transactions.product_id')
+            ->join('transactions',  'transactions.id', '=', 'products_has_transactions.transaction_id')
+            ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
+            ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
+            ->select('products.product_name', DB::raw('GROUP_CONCAT(categories.category_name) as category_names'), 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+            ->groupBy('products.product_name', 'products.price', 'products_has_transactions.quantity', 'products_has_transactions.price', 'transactions.transaction_date')
+            ->whereMonth('transactions.transaction_date', '=', $bulan)
+            ->whereYear('transactions.transaction_date', '=', $tahun)
+            ->get();
 
         return view('product.productSold', compact('productSold'));
     }

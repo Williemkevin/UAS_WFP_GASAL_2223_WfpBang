@@ -82,7 +82,6 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
     //list produk terjual
     Route::get('/productsold', [ProductController::class, 'productsold'])->name('admin.product.productsold');
     Route::get('/productsold/{bulan?}/{tahun?}/{filter?}', [ProductController::class, 'productsoldfiltered'])->name('admin.product.productsoldfiltered');
-
 });
 
 
@@ -105,7 +104,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/transaksi/{bulan?}/{tahun?}', [TransaksiController::class, 'index'])->name('transaksi.index');
 
 Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
-
 Route::get('/wishlist/{produk?}/{buyer?}', [WishlistController::class, 'store'])->name('wishlist.store');
 
 Route::get('/laporan/produk/{bulan?}/{tahun?}/{filter?}', [laporanController::class, 'laporanproduk'])->name('laporan.produk');
@@ -119,3 +117,5 @@ Route::post('/updateQuantity', [ProductController::class, 'updateQuantity'])->na
 
 Route::get('/saldo', [BuyerController::class, 'showSaldo'])->name('saldo');
 Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSaldo');
+
+Route::get('/product', [ProductController::class, 'index'])->name('product.index');
