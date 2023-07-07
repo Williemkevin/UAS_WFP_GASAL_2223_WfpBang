@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class WishlistController extends Controller
@@ -16,6 +17,13 @@ class WishlistController extends Controller
      */
     public function index()
     {
+        $productWishlist = Wishlist::select('product_id')
+            ->join('buyers', 'buyers.id', '=', 'wishlists.buyer_id')
+            ->join('users', 'users.id', '=', 'buyers.user_id')
+            ->where('users.id', Auth::id())
+            ->get()->pluck('product_id')->toArray();
+        $product = Product::whereIn('id', 'tidak aktif')->paginate(12);
+        return view('wishlist.index', compact('product'));
     }
 
     /**

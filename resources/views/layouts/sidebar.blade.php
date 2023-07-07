@@ -64,6 +64,15 @@
     @endauth
 
       @if (Auth::user()->hasRole('buyer'))
+      <li class="{{ (request()->is('wishlist*') || request()->is('wishlist*')) ? 'menu-item active': 'menu-item'}}">
+        <a href="{{ route('wishlist.buyer') }} " class="menu-link">
+          <i class="menu-icon tf-icons bx bx-heart"></i>
+          <div data-i18n="Tables">Wishlist</div>
+        </a>
+      </li>
+      @endif
+
+      @if (Auth::user()->hasRole('buyer'))
       <li class="{{ (request()->is('saldo*') || request()->is('topUpSaldo*')) ? 'menu-item active': 'menu-item'}}">
         <a href="{{ url('saldo') }} " class="menu-link">
           <i class="menu-icon tf-icons bx bx-money"></i>

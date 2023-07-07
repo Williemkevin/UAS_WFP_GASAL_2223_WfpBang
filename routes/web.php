@@ -12,6 +12,7 @@ use App\Http\Controllers\TipeController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\WishlistController;
 use App\Models\Product;
+use App\Models\Wishlist;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,3 +120,6 @@ Route::get('/saldo', [BuyerController::class, 'showSaldo'])->name('saldo');
 Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSaldo');
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+
+
+Route::get('/wishlist/buyer', [WishlistController::class])->name('wishlist.buyer');
