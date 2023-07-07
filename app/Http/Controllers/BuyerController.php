@@ -89,7 +89,8 @@ class BuyerController extends Controller
         //
     }
 
-    public function getmember(){
+    public function getmember()
+    {
         //
         //Display all category & soft deleted
         $nonMembers =
@@ -121,13 +122,12 @@ class BuyerController extends Controller
         $memberId = $request->input('memberId');
         $command = $request->input('command');
 
-        if($command == 'REMOVE-MEMBER'){
+        if ($command == 'REMOVE-MEMBER') {
 
             DB::table('buyers')
                 ->where('id', $memberId)
                 ->update(['membership' => '0']);
-        }
-        else{
+        } else {
             DB::table('buyers')
                 ->where('id', $memberId)
                 ->update(['membership' => '1']);
@@ -148,11 +148,12 @@ class BuyerController extends Controller
 
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
 
-        return view('saldo.index',compact('buyer'))->with('msg', 'Top Up Saldo Berhasil');
+        return view('saldo.index', compact('buyer'))->with('msg', 'Top Up Saldo Berhasil');
     }
-    public function showPoint()
+
+    public function showPoint(Request $request)
     {
-        $buyer = Buyer::where('user_id', Auth::user()->id)->first();
+        $buyer = Buyer::where('id', $request->idBuyer)->first();
         return $buyer->point;
     }
 }

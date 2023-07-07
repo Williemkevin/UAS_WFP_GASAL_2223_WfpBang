@@ -11,11 +11,6 @@
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         Add New Transaksi
-        
-        @php
-            $sessions=session()->all();
-            print_r($sessions);
-        @endphp
     </div>
 </div>
       <div class="container">
@@ -37,7 +32,7 @@
                         </div>
                       @else
                       <select class="form-select" aria-label="Default select example" name="namaStaff" id="namaStaff">
-                        <option>-- Pilih Staff --</option>
+                        <option value="-">-- Pilih Staff --</option>
                         @foreach ($staffs as $staff)
                         <option value="{{ $staff->id }}">{{$staff->name}}</option>
                         @endforeach
@@ -52,8 +47,8 @@
                             class="form-control" name="namaCustomer" id="namaCustomer" value="{{ Auth::user()->name }}" aria-describedby="helpId" disabled>
                         </div>
                         @else
-                        <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer">
-                            <option>-- Pilih Customer --</option>
+                        <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer" onchange="getPoint()">
+                            <option value="-">-- Pilih Customer --</option>
                             @foreach ($buyers as $buyer)
                             <option value="{{ $buyer->id }}">{{$buyer->name}}</option>
                             @endforeach
@@ -103,17 +98,31 @@
 
           </tbody>
             <tr>
-              <th></th><th></th><th></th><th></th>
+              <th rowspan="4">
+                <div class="d-flex align-items-center" id="infoPoint">
+                  Redeem :
+                  <div>
+                    <input type="number" name="redeemPoint" class="form-control" id="redeemPoint" aria-describedby="nameHelp" value="0" min="0" max="3">
+                    Jumlah Point : <span id="jumlahPoint"></span>
+                  </div>
+                </div>
+              </th>
+              <th></th><th></th><th></th>
               <th>Sub Total : </th>
               <th id="subtotal"></th>
             </tr>
             <tr>
-              <th></th><th></th><th></th><th></th>
+              <th></th><th></th><th></th>
+              <th>Point : </th>
+              <th id="redeemPointText"></th>
+            </tr>
+            <tr>
+              <th></th><th></th><th></th>
               <th>Pajak : </th>
               <th  id="pajak"></th>
             </tr>
             <tr>
-              <th></th><th></th><th></th><th></th>
+              <th></th><th></th><th></th>
               <th>Grand Total : </th>
               <th id="grandTotal"></th>
             </tr>
@@ -126,6 +135,8 @@
       <input type="hidden" name="total" id="total">
       <input type="hidden" name="tax" id="tax">
       <input type="hidden" name="grandtotal" id="grandtotal">
+      <input type="hidden" name="redeempoint" id="redeempoint">
+      <input type="hidden" name="jumlahPointhidden" id="jumlahPointhidden">
     </form>
 
 @endsection
@@ -147,7 +158,6 @@
         var products = <?php echo json_encode($products); ?>;
         var product = products.find(item => item.id == $("#namaProduk").val());
         var jumlah = parseInt($("#jumlah").val());
-
         var checkProduct = arrayProduk.find(item => item.id == product.id);
         if(checkProduct){
           checkProduct.quantity += jumlah;
@@ -166,6 +176,29 @@
 
     });
 
+    getPoint();
+    function getPoint(){
+      var customer = $("#namaCustomer").val();
+      if(customer == '-'){
+        $("#jumlahPoint").html(0);
+        $("#redeemPoint").prop("disabled", true); 
+      }else{
+        $.ajax({
+        url: "{{ route('point.buyer')}}",
+        type: 'GET',
+        data: { idBuyer: customer },
+        success: function(response) {
+        $("#redeemPoint").prop("disabled", false); 
+          $("#jumlahPointhidden").val(response);
+          $("#jumlahPoint").html(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+        }
+      });
+    }
+}
+
     function refreshTabel(){
       var count = 1;
       var subtotal = 0;
@@ -179,18 +212,36 @@
         $("#bodyTabel").append('<tr id="barang' + value["id"] +'"><td>'+ count +'</td><td>'+ value["name"]+'</td><td>'+ value["price"].toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td>'+ value["quantity"]+'</td>'+
               '<td>'+ parseFloat(value["quantity"] * value["price"]).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td><button type="button" class="btn btn-danger" onclick="hapusBarangKeranjang('+ value["id"] +')">X</button></td></tr>');
           count++;
-          subtotal+= parseFloat(value["quantity"] * value["price"]);
+          subtotal+= parseFloat(value["total"]);
       });
-      var pajak = subtotal*0.11;
-      var grand_total = subtotal + pajak;
+
     //   $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     //   $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     //   $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#subtotal").text(subtotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#pajak").text(pajak.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#grandTotal").text(grand_total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#redeemPointText").text("-"+(getRedeemPoint()*10000).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })); 
     }
 
+    $("#redeemPoint").on("change", function() {
+      if(getTotalBelanja() >= 100000 && ($("#jumlahPointhidden").val() >= $("#redeemPoint").val())){
+        getRedeemPoint();
+        refreshTabel();
+      }else if($("#jumlahPointhidden").val() < $("#redeemPoint").val()){
+        $("#redeemPoint").val($("#jumlahPointhidden").val()); 
+      }
+      else{
+        alert("Untuk reedem point minimal belanja adalah RP. 100.000")
+        $("#redeemPoint").val(0); 
+      }
+
+    });
+
+    function getRedeemPoint(){
+        redeemPoint = $("#redeemPoint").val(); 
+        return redeemPoint;
+    }
 
     function getTotalBelanja(){
         var totalBelanja = 0;
@@ -204,7 +255,7 @@
         return pajak;
     }
     function getGrandTotal(){
-        grandTotal = getTotalBelanja() + getPajak();
+        grandTotal = getTotalBelanja() + getPajak() - (getRedeemPoint()*10000);
         return grandTotal;
     }
 
@@ -220,6 +271,7 @@
       $("#total").val(getTotalBelanja());
       $("#tax").val(getPajak());
       $("#grandtotal").val(getGrandTotal());
+      $("#redeempoint").val(getRedeemPoint());
     });
 
 </script>

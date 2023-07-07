@@ -123,3 +123,5 @@ Route::get('/product', [ProductController::class, 'index'])->name('product.index
 
 
 Route::get('/wishlist/buyer', [WishlistController::class])->name('wishlist.buyer');
+
+Route::get('/point/{idBuyer?}', [BuyerController::class, 'showPoint'])->name('point.buyer');

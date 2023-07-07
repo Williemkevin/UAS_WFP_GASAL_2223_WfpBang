@@ -23,10 +23,6 @@ class TransaksiController extends Controller
      */
     public function index($bulan = null, $tahun = null)
     {
-        $idBuyer = Buyer::select('buyers.id')
-            ->join('users', 'users.id', '=', 'buyers.user_id')
-            ->where('users.id', Auth::id())
-            ->first();
         if ($bulan == null && $tahun == null) {
             $bulan = Carbon::now()->month;
             $tahun = Carbon::now()->year;
@@ -40,6 +36,7 @@ class TransaksiController extends Controller
             $transaksis->where('B.user_id', Auth::user()->id);
         }
         $transaksis = $transaksis->get();
+
         return view('transaksi.index', compact('transaksis'));
     }
 
@@ -74,11 +71,9 @@ class TransaksiController extends Controller
         $transactions->tax = $request->get('tax');
         $transactions->grand_total = $request->get('grandtotal');
         $transactions->get_point = CEIL($request->get('grandtotal') / 100000);
-
-        $transactions->redeem_point = 0;
+        $transactions->redeem_point = $request->get('redeempoint');
         $transactions->buyer_id = $request->get('namaCustomer');
         $transactions->staff_id = $request->get('namaStaff');
-
         $transactions->save();
 
         $arrayProduk = json_decode($request->get('arrayProduk'), true);
@@ -99,6 +94,9 @@ class TransaksiController extends Controller
                 }
             }
         }
+        $buyer = Buyer::find($request->get('namaCustomer'));
+        $buyer->point = $buyer->point + CEIL($request->get('grandtotal') / 100000) - $request->get('redeempoint');
+        $buyer->save();
         return $this->create();
     }
 
