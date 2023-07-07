@@ -73,8 +73,9 @@ class TransaksiController extends Controller
         $transactions->total = $request->get('total');
         $transactions->tax = $request->get('tax');
         $transactions->grand_total = $request->get('grandtotal');
-        $transactions->get_point = CEIL($request->get('grandtotal') / 100);
-        // $transactions->redeem_point = $request->get('grandtotal');
+        $transactions->get_point = CEIL($request->get('grandtotal') / 100000);
+
+        $transactions->redeem_point = 0;
         $transactions->buyer_id = $request->get('namaCustomer');
         $transactions->staff_id = $request->get('namaStaff');
 
@@ -88,8 +89,8 @@ class TransaksiController extends Controller
                 if ($ap != '-') {
                     $productTransaction = new ProductsHasTransactions();
                     $productTransaction->product_id = $ap['id'];
-                    $productTransaction->quantity = $ap['jumlah'];
-                    $productTransaction->price = $ap['harga'];
+                    $productTransaction->quantity = $ap['quantity'];
+                    $productTransaction->price = $ap['price'];
                     $productTransaction->transaction_id = $transactions->id;
 
                     $productTransaction->created_at = now("Asia/Bangkok");

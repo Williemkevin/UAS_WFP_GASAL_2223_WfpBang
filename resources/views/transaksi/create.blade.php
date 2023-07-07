@@ -11,6 +11,11 @@
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         Add New Transaksi
+        
+        @php
+            $sessions=session()->all();
+            print_r($sessions);
+        @endphp
     </div>
 </div>
       <div class="container">
@@ -145,8 +150,8 @@
 
         var checkProduct = arrayProduk.find(item => item.id == product.id);
         if(checkProduct){
-          checkProduct.jumlah += jumlah;
-          checkProduct.total = checkProduct.jumlah * checkProduct.harga;
+          checkProduct.quantity += jumlah;
+          checkProduct.total = checkProduct.quantity * checkProduct.price;
         }else{
           var produk = {
             id: $("#namaProduk").val(),
@@ -158,6 +163,7 @@
           arrayProduk.push(produk);
         }
         refreshTabel();
+
     });
 
     function refreshTabel(){
@@ -189,7 +195,7 @@
     function getTotalBelanja(){
         var totalBelanja = 0;
         for (let i = 0; i < arrayProduk.length; i++) {
-            totalBelanja += arrayProduk[i].harga*arrayProduk[i].jumlah;
+            totalBelanja += arrayProduk[i].total
         }
         return totalBelanja;
     }
@@ -198,7 +204,7 @@
         return pajak;
     }
     function getGrandTotal(){
-        grandTotal =getTotalBelanja() + getPajak();
+        grandTotal = getTotalBelanja() + getPajak();
         return grandTotal;
     }
 
