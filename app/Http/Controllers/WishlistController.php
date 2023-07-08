@@ -22,8 +22,8 @@ class WishlistController extends Controller
             ->join('users', 'users.id', '=', 'buyers.user_id')
             ->where('users.id', Auth::id())
             ->get()->pluck('product_id')->toArray();
-        $product = Product::whereIn('id', 'tidak aktif')->paginate(12);
-        return view('wishlist.index', compact('product'));
+        $products = Product::whereIn('id', $productWishlist)->get();
+        return view('wishlist.index', compact('products'));
     }
 
     /**

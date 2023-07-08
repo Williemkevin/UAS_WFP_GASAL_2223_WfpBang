@@ -30,6 +30,8 @@ Auth::routes();
 Route::resource('product', ProductController::class);
 Route::resource('buyer', BuyerController::class);
 
+Route::get('/wishlist/buyer', [WishlistController::class, 'index'])->name('wishlist.buyer');
+
 
 Route::post('product/aktifkan', [ProductController::class, 'aktifkan'])->name('product.aktifkan');
 Route::post('product/nonaktifkan', [ProductController::class, 'nonaktifkan'])->name('product.nonaktifkan');
@@ -121,7 +123,5 @@ Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSa
 
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
-
-Route::get('/wishlist/buyer', [WishlistController::class])->name('wishlist.buyer');
 
 Route::get('/point/{idBuyer?}', [BuyerController::class, 'showPoint'])->name('point.buyer');
