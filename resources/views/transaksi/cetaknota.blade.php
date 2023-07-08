@@ -10,7 +10,6 @@
     </div>
     <div style="float: right; margin-top: 7px; margin-right: 7px;">
       <form action="{{url('print/nota')}}">
-          <input type="hidden" value="{{$detailTransaksis[0]->transaction_id}}" name="idTransaksi" id="idTransaksi">
           <button class="btn btn-info btn-sm"><i class="bx bx-printer"></i>Cetak</button>
       </form>
   </div>
@@ -20,7 +19,7 @@
                 <div class="card" style="width: 30rem;">
                   <div class="card-body">
                     <div class="d-flex align-items-center">
-                      <h5 class="card-title mb-0" style="margin-right: 60px;">Date : {{ \Carbon\Carbon::parse($detailTransaksis[0]->transaction_date)->format('d F Y') }}
+                      <h5 class="card-title mb-0" style="margin-right: 60px;">Date : {{ \Carbon\Carbon::parse($productsTransactions[0]->transaction_date)->format('d F Y') }}
                     </h5>
                     </div>
                   </div>
@@ -37,7 +36,7 @@
                 <th>Total</th>
             </tr>
           </thead>
-          @foreach ($detailTransaksis as $detailTransaksi)
+          @foreach ($productsTransactions as $detailTransaksi)
           <tr>
               <th>{{ $loop->iteration}}</th>
               <th>{{ $detailTransaksi->product_name }}</th>
@@ -49,22 +48,22 @@
             <tr>
               <th></th><th></th><th></th>
               <th>Sub Total : </th>
-              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->total)}}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($productsTransactions[0]->total)}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
               <th>Redeem Point : </th>
-              <th>-{{App\Http\Controllers\ProductController::rupiah(($detailTransaksis[0]->redeem_point * 10000))}}</th>
+              <th>-{{App\Http\Controllers\ProductController::rupiah(($productsTransactions[0]->redeem_point * 10000))}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
               <th>Pajak : </th>
-              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->tax)}}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($productsTransactions[0]->tax)}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
               <th>Grand Total : </th>
-              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->grand_total)}}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($productsTransactions[0]->grand_total)}}</th>
             </tr>
         </table>
     </form>

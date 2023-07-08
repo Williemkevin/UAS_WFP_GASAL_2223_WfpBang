@@ -128,3 +128,5 @@ Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSa
 
 
 Route::get('/point/{idBuyer?}', [BuyerController::class, 'showPoint'])->name('point.buyer');
+
+Route::get('print/nota', [TransaksiController::class, 'printPdf'])->name('nota.print');

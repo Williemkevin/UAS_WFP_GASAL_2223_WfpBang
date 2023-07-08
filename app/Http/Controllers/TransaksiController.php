@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use PDF;
 
 class TransaksiController extends Controller
 {
@@ -154,5 +155,15 @@ class TransaksiController extends Controller
             ->where('t.id', $idTransaksi)
             ->get();
         return view('transaksi.detailTransaksi', compact('detailTransaksis'));
+    }
+
+    public function printPdf(Request $request)
+    {
+        $idTransaksi = $request->get('idTransaksi');
+
+        $productsTransactions = ProductsHasTransactions::where('transaction_id', $idTransaksi)->get();
+        $pdf = PDF::loadview('transaksi.cetaknota', compact('productsTransactions'));
+        $name = "nota" . $productsTransactions[0]->transaction_id;
+        return $pdf->download($name);
     }
 }
