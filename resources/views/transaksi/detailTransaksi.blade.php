@@ -8,7 +8,7 @@
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
         Detail Transaksi
     </div>
-</div>
+</div> 
       <div class="container">
             <div class="d-flex">
                 <div class="card" style="width: 30rem;">
@@ -31,6 +31,7 @@
                 <th>Total</th>
             </tr>
           </thead>
+          {{-- @dd($detailTransaksis); --}}
           @foreach ($detailTransaksis as $detailTransaksi)
           <tr>
               <th>{{ $loop->iteration}}</th>
@@ -44,6 +45,11 @@
               <th></th><th></th><th></th>
               <th>Sub Total : </th>
               <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->total)}}</th>
+            </tr>
+            <tr>
+              <th></th><th></th><th></th>
+              <th>Redeem Point : </th>
+              <th>-{{App\Http\Controllers\ProductController::rupiah(($detailTransaksis[0]->redeem_point * 10000))}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>
