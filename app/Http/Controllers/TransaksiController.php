@@ -163,7 +163,7 @@ class TransaksiController extends Controller
 
         $productsTransactions = ProductsHasTransactions::where('transaction_id', $idTransaksi)->get();
         $pdf = PDF::loadview('transaksi.cetaknota', compact('productsTransactions'));
-        $name = "nota" . $productsTransactions[0]->transaction_id;
+        $name = "nota" . $productsTransactions[0]->transaction_id .".pdf";
         return $pdf->download($name);
     }
 }
