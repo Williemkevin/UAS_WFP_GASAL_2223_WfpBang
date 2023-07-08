@@ -74,7 +74,7 @@
                                             <tbody class="table-border-bottom-0">
                                             @foreach ($categories as $category)
                                                 <tr>
-                                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>{{ $category->category_name }}</strong></td>
+                                                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i><a href="/product/{{$category->id}}"><strong>{{ $category->category_name }}</strong></a></td>
                                                     <td>
                                                         {{ $category->description }}
                                                     </td>
