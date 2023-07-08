@@ -24,24 +24,31 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($filterKategori = "all")
+    public function index($filterKategori = null)
     {
-        // dd($filterKategori);
-        $kategoris = Category::all();
+        $kategoris = DB::table('categories')->get();
         $productWishlist = Wishlist::select('product_id')
-            ->join('buyers', 'buyers.id', '=', 'wishlists.buyer_id')
-            ->join('users', 'users.id', '=', 'buyers.user_id')
-            ->where('users.id', Auth::id())
+        ->join('buyers', 'buyers.id', '=', 'wishlists.buyer_id')
+        ->join('users', 'users.id', '=', 'buyers.user_id')
+        ->where('users.id', Auth::id())
             ->get()->pluck('product_id')->toArray();
-        if ($filterKategori == 'all') {
-            $productAktif = Product::where('status', 'aktif')->paginate(12);
+
+        if ($filterKategori && $filterKategori != 'all') {
+            $productAktif = DB::table('products')
+            ->join('products_has_categories', 'products.id', '=', 'products_has_categories.product_id')
+            ->join('categories', 'products_has_categories.category_id', '=', 'categories.id')
+            ->where('categories.id', $filterKategori)
+                ->where('products.status', 'aktif')
+                ->paginate(12);
         } else {
-            $productId = ProductsHasCategories::where('category_id', $filterKategori)->pluck('product_id');
-            $productAktif = Product::whereIn('id', $productId)->where('status', 'aktif')->paginate(12);
+            $productAktif = Product::where('status', 'aktif')->paginate(12);
         }
+
         $productNonAktif = Product::where('status', 'tidak aktif')->paginate(4);
-        return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist', 'kategoris'));
+
+        return view('product.index', compact('productAktif', 'productNonAktif', 'productWishlist', 'kategoris', 'filterKategori'));
     }
+
 
     /**
      * Show the form for creating a new resource.

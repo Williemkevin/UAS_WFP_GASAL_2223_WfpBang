@@ -27,6 +27,8 @@ use App\Models\Wishlist;
 
 Auth::routes();
 
+Route::get('/product/{filterKategori?}', [ProductController::class, 'index'])->name('product.index');
+
 Route::resource('product', ProductController::class);
 Route::resource('buyer', BuyerController::class);
 
@@ -121,7 +123,8 @@ Route::post('/updateQuantity', [ProductController::class, 'updateQuantity'])->na
 Route::get('/saldo', [BuyerController::class, 'showSaldo'])->name('saldo');
 Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSaldo');
 
-Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+// Route::get('/product', [ProductController::class, 'index'])->name('product.index');
+
 
 
 Route::get('/point/{idBuyer?}', [BuyerController::class, 'showPoint'])->name('point.buyer');
