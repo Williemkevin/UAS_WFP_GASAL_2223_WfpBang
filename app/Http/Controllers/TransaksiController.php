@@ -159,6 +159,11 @@ class TransaksiController extends Controller
         return view('transaksi.detailTransaksi', compact('detailTransaksis'));
     }
 
+    public function get_product(Request $request)
+    {
+        $product = DB::table("products")->when("id", "=", $request->product_name)->get();
+        return ["data" => $product];
+    }
     public function printPdf(Request $request)
     {
         $idTransaksi = $request->get('idTransaksi');

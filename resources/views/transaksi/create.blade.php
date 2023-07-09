@@ -66,7 +66,7 @@
                       <select class="form-select" aria-label="Default select example" name="namaProduk" id="namaProduk">
                         <option>-- Pilih Produk --</option>
                         @foreach ($products as $produk)
-                            <option value="{{ $produk->id }}">{{$produk->product_name}}</option>
+                            <option value="{{ $produk->id }}" data-id="{{$produk->product_name}}">{{$produk->product_name}}</option>
                         @endforeach
                       </select>
                     </div>
@@ -155,23 +155,50 @@
     });
 
     $("#btnTambah").click(function () {
-        var products = <?php echo json_encode($products); ?>;
-        var product = products.find(item => item.id == $("#namaProduk").val());
-        var jumlah = parseInt($("#jumlah").val());
-        var checkProduct = arrayProduk.find(item => item.id == product.id);
-        if(checkProduct){
-          checkProduct.quantity += jumlah;
-          checkProduct.total = checkProduct.quantity * checkProduct.price;
-        }else{
-          var produk = {
-            id: $("#namaProduk").val(),
-            name: product.product_name,
-            quantity: jumlah,
-            price:product.price,
-            total:jumlah*product.price
-          };
+        var sudah_ada = false;
+        $.each(arrayProduk, function (key, value) {
+            alert(value["name"] + ";" + $("#namaProduk").data("id"));
+            if(value["name"] == $("#namaProduk").data("id")){
+                sudah_ada = true;
+                value["quantity"] += parseInt($("#jumlah").val());
+                // break;
+
+                return;
+            }
+
+        });
+        if(sudah_ada == false){
+            var products = <?php echo json_encode($products); ?>;
+            var product = products.find(item => item.id == $("#namaProduk").val());
+            var jumlah = parseInt($("#jumlah").val());
+            var produk = {
+                id: $("#namaProduk").val(),
+                name: product.product_name,
+                quantity: jumlah,
+                price:product.price,
+                total:jumlah*product.price
+            };
           arrayProduk.push(produk);
         }
+
+        // var products = <?php echo json_encode($products); ?>;
+        // var product = products.find(item => item.id == $("#namaProduk").val());
+        //
+        // var jumlah = parseInt($("#jumlah").val());
+        // var checkProduct = arrayProduk.find(item => item.id == product.id);
+        // if(checkProduct){
+        //   checkProduct.quantity += jumlah;
+        //   checkProduct.total = checkProduct.quantity * checkProduct.price;
+        // }else{
+        //   var produk = {
+        //     id: $("#namaProduk").val(),
+        //     name: product.product_name,
+        //     quantity: jumlah,
+        //     price:product.price,
+        //     total:jumlah*product.price
+        //   };
+        //   arrayProduk.push(produk);
+        // }
         refreshTabel();
 
     });
@@ -181,14 +208,14 @@
       var customer = $("#namaCustomer").val();
       if(customer == '-'){
         $("#jumlahPoint").html(0);
-        $("#redeemPoint").prop("disabled", true); 
+        $("#redeemPoint").prop("disabled", true);
       }else{
         $.ajax({
         url: "{{ route('point.buyer')}}",
         type: 'GET',
         data: { idBuyer: customer },
         success: function(response) {
-        $("#redeemPoint").prop("disabled", false); 
+        $("#redeemPoint").prop("disabled", false);
           $("#jumlahPointhidden").val(response);
           $("#jumlahPoint").html(response);
         },
@@ -218,10 +245,11 @@
     //   $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     //   $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     //   $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+      $("#subtotal").text(getSubtotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
+    //   $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
       $("#pajak").text(getPajak().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
       $("#grandTotal").text(getGrandTotal().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
-      $("#redeemPointText").text("-"+(getRedeemPoint()*10000).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })); 
+      $("#redeemPointText").text("-"+(getRedeemPoint()*10000).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
     }
 
     $("#redeemPoint").on("change", function() {
@@ -229,20 +257,27 @@
         getRedeemPoint();
         refreshTabel();
       }else if($("#jumlahPointhidden").val() < $("#redeemPoint").val()){
-        $("#redeemPoint").val($("#jumlahPointhidden").val()); 
+        $("#redeemPoint").val($("#jumlahPointhidden").val());
       }
       else{
         alert("Untuk reedem point minimal belanja adalah RP. 100.000")
-        $("#redeemPoint").val(0); 
+        $("#redeemPoint").val(0);
       }
 
     });
 
     function getRedeemPoint(){
-        redeemPoint = $("#redeemPoint").val(); 
+        redeemPoint = $("#redeemPoint").val();
         return redeemPoint;
     }
 
+    function getSubtotal(){
+        var subtotal = 0;
+        $.each(arrayProduk, function (key, value) {
+            subtotal += value["price"] + value["quantity"]
+        });
+        return subtotal;
+    }
     function getTotalBelanja(){
         var totalBelanja = 0;
         for (let i = 0; i < arrayProduk.length; i++) {
@@ -251,11 +286,13 @@
         return totalBelanja;
     }
     function getPajak(){
-        pajak = getTotalBelanja()*0.11;
+        // pajak = getTotalBelanja()*0.11;
+        pajak = getSubtotal()*0.11;
         return pajak;
     }
     function getGrandTotal(){
-        grandTotal = getTotalBelanja() + getPajak() - (getRedeemPoint()*10000);
+        // grandTotal = getTotalBelanja() + getPajak() - (getRedeemPoint()*10000);
+        grandTotal = getSubtotal() + getPajak() - (getRedeemPoint()*10000);
         return grandTotal;
     }
 
