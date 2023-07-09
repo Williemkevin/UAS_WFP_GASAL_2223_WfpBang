@@ -36,12 +36,11 @@
                 <span>Alamat : {{$transactions->address}}</span>
             </div>
         </div>
-        
+
         <table class="table">
             <thead>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Gambar Produk</th>
                 <th scope="col">Nama Produk</th>
                 <th scope="col">Harga</th>
                 <th scope="col">Jumlah</th>
@@ -52,7 +51,7 @@
                 @foreach ($productsTransactions as $detailTransaksi)
                 <tr>
                     <th>{{ $loop->iteration}}</th>
-                    <th><img class="card-img-top" src="images/1688553865_1.jpg" alt="..."/></th>
+                    {{-- <th><img class="card-img-top" src="images/1688553865_1.jpg" alt="..."/></th> --}}
                     <th>{{ $detailTransaksi->product_name }}</th>
                     <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->price)}}</th>
                     <th>{{ $detailTransaksi->quantity }}</th>

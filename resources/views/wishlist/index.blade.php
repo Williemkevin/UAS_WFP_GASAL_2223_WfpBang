@@ -16,7 +16,7 @@
             @foreach ($products as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="{{'images/'. $product->image_url}}" alt="..." />
+                    <img class="card-img-top" src="{{ asset('images/'.$product->image_url) }}" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>
@@ -41,7 +41,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="card h-80">
-                                                <img class="card-img-top" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                                                <img class="card-img-top" src="{{ asset('images/'.$product->image_url) }}" alt="..." />
 
                                                 <div class="card-body p-4">
                                                     <div class="text-center">
@@ -83,7 +83,22 @@
             success: function (data) {
                 if (data['status'] == 'success') {
                     window.location.reload(true);
+                    alert('Horrey Product telah dihapus dari wishlist');
                 }
+            }
+        });
+    }
+
+    function addCart(id) {
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('addToCart')}}",
+            data: {
+                '_token': '<?php echo csrf_token(); ?>',
+                'id': id,
+            },
+            success: function (data) {
+                alert('Horrey Product telah ditambah ke cart');
             }
         });
     }
