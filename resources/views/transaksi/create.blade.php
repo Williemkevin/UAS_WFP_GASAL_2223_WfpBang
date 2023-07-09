@@ -157,8 +157,7 @@
     $("#btnTambah").click(function () {
         var sudah_ada = false;
         $.each(arrayProduk, function (key, value) {
-            alert(value["name"] + ";" + $("#namaProduk").data("id"));
-            if(value["name"] == $("#namaProduk").data("id")){
+            if(value["name"] == $("#namaProduk option:selected").text()){
                 sudah_ada = true;
                 value["quantity"] += parseInt($("#jumlah").val());
                 // break;
@@ -227,6 +226,7 @@
 }
 
     function refreshTabel(){
+        alert(arrayProduk[1]["quantity"]);
       var count = 1;
       var subtotal = 0;
       $("#bodyTabel").empty();
@@ -239,7 +239,7 @@
         $("#bodyTabel").append('<tr id="barang' + value["id"] +'"><td>'+ count +'</td><td>'+ value["name"]+'</td><td>'+ value["price"].toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td>'+ value["quantity"]+'</td>'+
               '<td>'+ parseFloat(value["quantity"] * value["price"]).toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }) +'</td><td><button type="button" class="btn btn-danger" onclick="hapusBarangKeranjang('+ value["id"] +')">X</button></td></tr>');
           count++;
-          subtotal+= parseFloat(value["total"]);
+          subtotal+= parseFloat(value["quantity"] * value["price"]);
       });
 
     //   $("#subtotal").text(getTotalBelanja().toLocaleString('id-ID', { style: 'currency', currency: 'IDR' }));
@@ -274,7 +274,7 @@
     function getSubtotal(){
         var subtotal = 0;
         $.each(arrayProduk, function (key, value) {
-            subtotal += value["price"] + value["quantity"]
+            subtotal += value["price"] * value["quantity"]
         });
         return subtotal;
     }
