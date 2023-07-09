@@ -183,6 +183,10 @@ class BuyerController extends Controller
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         return $buyer->point;
-        // return 0;
+    }
+    public static function showPointBuyerTransaction(Request $request)
+    {
+        $buyer = Buyer::where('id', $request->idBuyer)->first();
+        return $buyer->point;
     }
 }

@@ -29,7 +29,7 @@ Auth::routes();
 
 Route::get('/product/{filterKategori?}', [ProductController::class, 'index'])->name('product.index');
 
-Route::resource('staff', StaffController::class);
+Route::resource('product', ProductController::class);
 Route::resource('buyer', BuyerController::class);
 
 Route::get('/wishlist/buyer', [WishlistController::class, 'index'])->name('wishlist.buyer');
@@ -55,8 +55,6 @@ Route::group(['middleware' => ['auth', 'role:owner'], 'prefix' => 'owner'], func
     //Register staff account by owner
     Route::get('/register', [StaffController::class, 'formRegister'])->name('owner.staff.register');
     Route::post('/registeraccount', [StaffController::class, 'register'])->name('owner.staff.registeraccount');
-
-
 
     //Activate staff account by owner
     Route::get('/activate{id}', [StaffController::class, 'formActivate'])->name('owner.staff.activate');
@@ -85,8 +83,6 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
     //list member & non member route
     Route::get('/memberlist', [BuyerController::class, 'getmember'])->name('admin.member.memberlist');
     Route::post('/memberlist/update', [BuyerController::class, 'updatemembership'])->name('admin.member.updatemembership');
-
-    Route::resource('product', ProductController::class);
 
     //list produk terjual
     Route::get('/productsold', [ProductController::class, 'productsold'])->name('admin.product.productsold');
@@ -129,7 +125,7 @@ Route::get('/topUpSaldo', [BuyerController::class, 'topUpSaldo'])->name('topUpSa
 
 // Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 
-
+Route::get('/point/transaction/{idBuyer?}', [BuyerController::class, 'showPointBuyerTransaction'])->name('showpoint.transaction');
 
 Route::get('/point/{idBuyer?}', [BuyerController::class, 'showPoint'])->name('point.buyer');
 

@@ -160,8 +160,6 @@
             if(value["name"] == $("#namaProduk option:selected").text()){
                 sudah_ada = true;
                 value["quantity"] += parseInt($("#jumlah").val());
-                // break;
-
                 return;
             }
 
@@ -210,7 +208,7 @@
         $("#redeemPoint").prop("disabled", true);
       }else{
         $.ajax({
-        url: "{{ route('point.buyer')}}",
+        url: "{{ route('showpoint.transaction')}}",
         type: 'GET',
         data: { idBuyer: customer },
         success: function(response) {
@@ -226,7 +224,7 @@
 }
 
     function refreshTabel(){
-        alert(arrayProduk[1]["quantity"]);
+        // alert(arrayProduk[1]["quantity"]);
       var count = 1;
       var subtotal = 0;
       $("#bodyTabel").empty();
