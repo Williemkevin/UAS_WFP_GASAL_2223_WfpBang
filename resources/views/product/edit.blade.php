@@ -10,7 +10,7 @@
 @section('content')
 <div class="portlet-title">
     <div style="display: inline-block; margin: 15px; font-size: 25px; font-weight: bold;">
-        Add New Product
+        Edit Product
     </div>
 </div>
 <form method="POST" action="{{route('product.update', $produk->id)}}" enctype="multipart/form-data">
@@ -56,20 +56,20 @@
                     <select style="width:90%; float:left; margin-bottom:10px; margin-right:10px;" class="form-select kategori{{ $count }}" aria-label="Default select example" name="kategori[]" id="kategori">
                         @foreach ($categories as $categori)
                             @if ($categori->id == $pc->category_id)
-                                <option value="{{ $categori->id }}" selected>{{$categori ->category_name }}</option> 
+                                <option value="{{ $categori->id }}" selected>{{$categori ->category_name }}</option>
                             @else
-                                <option value="{{ $categori->id }}">{{$categori ->category_name }}</option> 
+                                <option value="{{ $categori->id }}">{{$categori ->category_name }}</option>
                             @endif
-                        @endforeach 
+                        @endforeach
                     </select>
                     <button style="width:5%; margin-top:5px;" type="submit" class="btn btn-danger" onclick="deletekategori({{ $count }})">X</button>
-                </div> 
+                </div>
                 @php
                     $count++;
                 @endphp
             @endforeach
         </div>
-        <input type="button" id="btnAddKategori" value="Tambah Kategori" style="width: 100%;" class="btn btn-primary">            
+        <input type="button" id="btnAddKategori" value="Tambah Kategori" style="width: 100%;" class="btn btn-primary">
     </div>
     <button type="submit" class="btn btn-primary" style="margin-top: 20px;">Submit</button>
 </form>
@@ -84,7 +84,7 @@ $("#btnAddKategori").click(function () {
         '<div class=' + count + '><div><select style="width:90%; float:left; margin-bottom:10px; margin-right:10px;" class="form-select kategori' + count +'" aria-label="Default select example" name="kategori[]" id="kategori">' +
         '<option value="-">-- Pilih Categories --</option>@foreach ($categories as $categori)<option value="{{ $categori->id }}">{{$categori ->category_name }}</option>' +
         '@endforeach </select>' +
-        '<button style="width:5%; margin-top:5px;" type="submit" class="btn btn-danger" onclick="deletekategori(' + count +')">X</button></div>');        
+        '<button style="width:5%; margin-top:5px;" type="submit" class="btn btn-danger" onclick="deletekategori(' + count +')">X</button></div>');
 });
 function deletekategori(id) {
         $("." + id).remove();
