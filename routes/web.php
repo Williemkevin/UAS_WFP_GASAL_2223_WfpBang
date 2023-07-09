@@ -29,7 +29,7 @@ Auth::routes();
 
 Route::get('/product/{filterKategori?}', [ProductController::class, 'index'])->name('product.index');
 
-
+Route::resource('staff', StaffController::class);
 Route::resource('buyer', BuyerController::class);
 
 Route::get('/wishlist/buyer', [WishlistController::class, 'index'])->name('wishlist.buyer');
@@ -55,6 +55,8 @@ Route::group(['middleware' => ['auth', 'role:owner'], 'prefix' => 'owner'], func
     //Register staff account by owner
     Route::get('/register', [StaffController::class, 'formRegister'])->name('owner.staff.register');
     Route::post('/registeraccount', [StaffController::class, 'register'])->name('owner.staff.registeraccount');
+
+
 
     //Activate staff account by owner
     Route::get('/activate{id}', [StaffController::class, 'formActivate'])->name('owner.staff.activate');

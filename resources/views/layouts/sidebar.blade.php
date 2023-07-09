@@ -52,6 +52,15 @@
         </a>
       </li>
 
+      @if (Auth::user()->hasRole('owner'))
+        <li class="{{ (request()->is('staff*') || request()->is('admin/staff*')) ? 'menu-item active': 'menu-item'}}">
+            <a href="{{ url('staff') }} " class="menu-link">
+            <i class="menu-icon tf-icons bx bx-user"></i>
+            <div data-i18n="Tables">Staff</div>
+            </a>
+        </li>
+        @endif
+
     @auth
         @if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff'))
         <li class="{{ (request()->is('buyer*')) ? 'menu-item active': 'menu-item'}}">
