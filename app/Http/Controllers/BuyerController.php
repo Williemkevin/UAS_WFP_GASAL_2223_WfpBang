@@ -151,7 +151,7 @@ class BuyerController extends Controller
         return view('saldo.index', compact('buyer'))->with('msg', 'Top Up Saldo Berhasil');
     }
 
-    public function showPoint()
+    public static function showPoint()
     {
         $buyer = Buyer::where('user_id', Auth::user()->id)->first();
         return $buyer->point;
