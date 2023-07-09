@@ -29,7 +29,7 @@ Auth::routes();
 
 Route::get('/product/{filterKategori?}', [ProductController::class, 'index'])->name('product.index');
 
-Route::resource('product', ProductController::class);
+
 Route::resource('buyer', BuyerController::class);
 
 Route::get('/wishlist/buyer', [WishlistController::class, 'index'])->name('wishlist.buyer');
@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth', 'role:staff,owner'], 'prefix' => 'admin']
     //list member & non member route
     Route::get('/memberlist', [BuyerController::class, 'getmember'])->name('admin.member.memberlist');
     Route::post('/memberlist/update', [BuyerController::class, 'updatemembership'])->name('admin.member.updatemembership');
+
+    Route::resource('product', ProductController::class);
 
     //list produk terjual
     Route::get('/productsold', [ProductController::class, 'productsold'])->name('admin.product.productsold');

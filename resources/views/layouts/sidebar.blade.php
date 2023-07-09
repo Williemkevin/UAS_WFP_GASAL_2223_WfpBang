@@ -38,7 +38,7 @@
         {{-- @endif
       @endauth --}}
 
-      <li class="{{ (request()->is('product*')) ? 'menu-item active': 'menu-item'}}"class="menu-item">
+      <li class="{{ (request()->is('product*') || request()->is('admin/product*')) ? 'menu-item active': 'menu-item'}}"class="menu-item">
         <a href="{{ url('product') }}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-collection"></i>
           <div data-i18n="Tables">Produk</div>
