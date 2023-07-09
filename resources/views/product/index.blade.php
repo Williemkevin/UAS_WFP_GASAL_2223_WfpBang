@@ -19,7 +19,7 @@
 @endif
 <section>
     <div style="margin: 15px; font-size: 15px; font-weight: bold;">
-        Filter : 
+        Filter :
         <select class="form-select" aria-label="Default select example" name="filterKategori" id="filterKategori">
             <option value="all">-- Filter Category --</option>
             @foreach ($kategoris as $kategori)
@@ -223,7 +223,7 @@
 
     function addWishlist(id) {
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: "{{ route('product.addWishlist')}}",
             data: {
                 '_token': '<?php echo csrf_token(); ?>',
@@ -279,14 +279,14 @@
                 filterKategori: idKategori
             },
             success: function(data) {
-                
+
                 window.location.reload
                 var newUrl = "{{ route('product.index') }}/" + idKategori;
                 history.pushState(null, '', newUrl);
                 location.reload();
             },
             error: function(xhr, status, error) {
-                console.log(error); 
+                console.log(error);
             }
         });
     });
