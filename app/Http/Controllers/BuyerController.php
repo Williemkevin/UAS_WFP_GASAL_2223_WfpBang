@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buyer;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class BuyerController extends Controller
 {
@@ -30,7 +33,7 @@ class BuyerController extends Controller
      */
     public function create()
     {
-        //
+        return view('buyer.create');
     }
 
     /**
@@ -41,7 +44,32 @@ class BuyerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        // dd($request->get('email'));
+        $user = new User();
+        $user->name = $request->get('namaBuyer');
+        $user->email = $request->get('email');
+        $user->username = $request->get('username');
+        $user->password = Hash::make($request->get('password'));
+        $user->role = "buyer";
+        $user->created_at = now("Asia/Bangkok");
+        $user->updated_at = now("Asia/Bangkok");
+        $user->save();
+
+        $buyer = new Buyer();
+        $buyer->birthdate = $request->get('birthdate');
+        $buyer->phone = $request->get('phone');
+        $buyer->address = $request->get('address');
+        $buyer->gender = ($request->get('gender') == 'Pria') ? 'Male' : 'Female';
+        $buyer->balance = 0;
+        $buyer->membership = '1';
+        $buyer->point = 0;
+        $buyer->user_id = $user->id;
+        $buyer->created_at = now("Asia/Bangkok");
+        $buyer->updated_at = now("Asia/Bangkok");
+        $user->buyer()->save($buyer);
+
+        return redirect()->route('buyer.index');
     }
 
     /**

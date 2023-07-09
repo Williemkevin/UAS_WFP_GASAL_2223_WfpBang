@@ -16,9 +16,8 @@
         <div class="card">
             <div class="demo-inline-spacing">
                 @if (Auth::user()->hasRole('owner'))
-                    <a href={{ route('admin.staff.create') }} class="btn rounded-pill btn-primary">
+                    <a href={{ route('buyer.create') }} class="btn rounded-pill btn-primary">
                         <iconify-icon icon="bx:plus"></iconify-icon>&nbsp; Tambah Buyer
-                        {{-- <span class="tf-icons bx bx-pie-chart-alt"></span>&nbsp; Tambah Kategori --}}
                     </a>
                 @endif
             <div class="row">
@@ -96,11 +95,11 @@
                                         <div>
                                         <div class="mt-3">
                                             <!-- Modal -->
-                                            <div class="modal fade" style="z-index: 9999;" id="modalCenter-{{ $staff->id }}" tabindex="-1" aria-hidden="true">
+                                            <div class="modal fade" style="z-index: 9999;" id="modalCenter-{{ $member->id }}" tabindex="-1" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title text-danger" id="modalCenterTitle">Hapus Staff</h5>
+                                                        <h5 class="modal-title text-danger" id="modalCenterTitle">Hapus Member</h5>
                                                         <button
                                                         type="button"
                                                         class="btn-close"
@@ -111,7 +110,7 @@
                                                     <div class="modal-body">
                                                         <div class="row">
                                                             <div class="col mb-3">
-                                                                <h5>Anda yakin menghapus {{ $staff->name }} ?</h5>
+                                                                <h5>Anda yakin menghapus {{ $member->name }} ?</h5>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -119,7 +118,7 @@
                                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                                                             Tidak
                                                         </button>
-                                                        <button type="button" class="btn btn-primary" data-staff-id="{{ $staff->id }}">Ya</button>
+                                                        <button type="button" class="btn btn-primary" data-member-id="{{ $member->id }}">Ya</button>
                                                     </div>
                                                     </div>
                                                 </div>
