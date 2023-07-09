@@ -9,10 +9,12 @@ use App\Models\Staff;
 use App\Models\Transactions;
 use App\Models\Transaksi;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 use PDF;
 
 class TransaksiController extends Controller
@@ -160,10 +162,21 @@ class TransaksiController extends Controller
     public function printPdf(Request $request)
     {
         $idTransaksi = $request->get('idTransaksi');
+        $productsTransactions = DB::table('products_has_transactions')
+            ->join('products', 'products.id', '=', 'products_has_transactions.product_id')
+            ->where('transaction_id', $idTransaksi)
+            ->select('products_has_transactions.*', 'products.*')
+            ->get();
 
-        $productsTransactions = ProductsHasTransactions::where('transaction_id', $idTransaksi)->get();
-        $pdf = PDF::loadview('transaksi.cetaknota', compact('productsTransactions'));
-        $name = "nota" . $productsTransactions[0]->transaction_id .".pdf";
+        $transactions = DB::table('transactions')
+            ->join('buyers', 'buyers.id', '=', 'transactions.buyer_id')
+            ->join('users', 'users.id', '=', 'buyers.user_id')
+            ->where('transactions.id', 1)
+            ->select('transactions.*', 'buyers.*', 'users.name')->first();
+        $pdf = PDF::loadview('transaksi.cetaknota', compact('productsTransactions', 'transactions'));
+        $name = "nota" . $productsTransactions[0]->transaction_id . ".pdf";
         return $pdf->download($name);
+
+        // return view('transaksi.cetaknota', compact('productsTransactions', 'transactions'));
     }
 }

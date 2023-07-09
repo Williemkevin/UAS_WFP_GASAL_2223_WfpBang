@@ -33,7 +33,8 @@
             @foreach ($productAktif as $product)
             <div class="col mb-5">
                 <div class="card h-100">
-                    <img class="card-img-top" src="{{'images/'. $product->image_url}}" alt="..." />
+                    {{-- <img class="card-img-top" src="{{'images/'. $product->image_url}}" alt="..." /> --}}
+                    <img class="card-img-top" src="images/1688553865_1.jpg" alt="..." />
                     <div class="card-body p-4">
                         <div class="text-center">
                             <h5 class="fw-bolder">{{ $product->product_name }}</h5>
@@ -53,7 +54,6 @@
                                     <a href="{{ route('product.edit', $product->product_id) }}" class="btn btn-sm btn-primary"><i class='bx bx-edit-alt'></i></a>
                                     <button onclick="nonaktifkan({{ $product->product_id }})" class="btn btn-sm btn-danger"><i class='bx bx-power-off'></i></button>
                                 @endif
-
                                 @if(str_contains(Auth::user()->role, 'buyer'))
                                     <button onclick="addCart({{ $product->product_id }})" style="border: none;"><i class='bx bx-cart'></i></button>
                                     @if (in_array($product->product_id, $productWishlist))
