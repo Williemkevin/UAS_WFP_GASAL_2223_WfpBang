@@ -43,17 +43,18 @@
                       <h5 class="card-title mb-0" style="margin-right: 20px;">Customer</h5>
                       @if (str_contains(Auth::user()->role, 'buyer'))
                         <div class="mb-3">
-                          <input type="text"
-                            class="form-control" name="namaCustomer" id="namaCustomer" value="{{ Auth::user()->name }}" aria-describedby="helpId" disabled>
+                            <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer" onchange="getPoint()" disabled>
+                              <option value="{{ Auth::user()->buyer->id  }}">{{ Auth::user()->name }}</option>
+                          </select>
                         </div>
-                        @else
+                      @else
                         <select class="form-select" aria-label="Default select example" name="namaCustomer" id="namaCustomer" onchange="getPoint()">
                             <option value="-">-- Pilih Customer --</option>
                             @foreach ($buyers as $buyer)
                             <option value="{{ $buyer->id }}">{{$buyer->name}}</option>
                             @endforeach
                         </select>
-                        @endif
+                      @endif
 
                     </div>
                   </div>
@@ -251,6 +252,9 @@
     }
 
     $("#redeemPoint").on("change", function() {
+      var json = JSON.stringify(arrayProduk[i].total);
+      alert(json);
+
       if(getTotalBelanja() >= 100000 && ($("#jumlahPointhidden").val() >= $("#redeemPoint").val())){
         getRedeemPoint();
         refreshTabel();
