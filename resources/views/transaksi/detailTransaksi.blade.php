@@ -43,13 +43,20 @@
               <th>{{ $detailTransaksi->product_name }}</th>
               <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->price)}}</th>
               <th>{{ $detailTransaksi->quantity }}</th>
-              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->total)}}</th>
+              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksi->quantity*$detailTransaksi->price)}}</th>
           </tr>
           @endforeach
             <tr>
               <th></th><th></th><th></th>
               <th>Sub Total : </th>
-              <th>{{App\Http\Controllers\ProductController::rupiah($detailTransaksis[0]->total)}}</th>
+
+              @php
+              $subTotal = 0;
+              foreach ($detailTransaksis as $detailTransaksi){
+                $subTotal += $detailTransaksi->quantity * $detailTransaksi->price;
+              }
+              @endphp
+              <th>{{App\Http\Controllers\ProductController::rupiah($subTotal)}}</th>
             </tr>
             <tr>
               <th></th><th></th><th></th>

@@ -252,9 +252,6 @@
     }
 
     $("#redeemPoint").on("change", function() {
-      var json = JSON.stringify(arrayProduk[i].total);
-      alert(json);
-
       if(getTotalBelanja() >= 100000 && ($("#jumlahPointhidden").val() >= $("#redeemPoint").val())){
         getRedeemPoint();
         refreshTabel();
@@ -283,7 +280,7 @@
     function getTotalBelanja(){
         var totalBelanja = 0;
         for (let i = 0; i < arrayProduk.length; i++) {
-            totalBelanja += arrayProduk[i].total
+            totalBelanja += arrayProduk[i].price * arrayProduk[i].quantity 
         }
         return totalBelanja;
     }
@@ -306,6 +303,8 @@
     refreshTabel();
 
     $("#simpan").click(function () {
+      var json = JSON.stringify(arrayProduk);
+      alert(json);
       $("#arrayProdukInput").val(JSON.stringify(arrayProduk));
       $("#total").val(getTotalBelanja());
       $("#tax").val(getPajak());
