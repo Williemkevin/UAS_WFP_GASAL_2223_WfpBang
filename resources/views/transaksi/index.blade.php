@@ -61,6 +61,7 @@
                 @else
                 @foreach ($transaksis as $transaksi)
                 <tr>
+                    @dd($transaksis)
                     <th>{{$loop->iteration}}</th>
                     <th>{{ \Carbon\Carbon::parse($transaksi->transaction_date)->format('d F Y') }}</th>
                     <th>{{$transaksi->name}}</th>

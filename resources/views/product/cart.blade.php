@@ -15,7 +15,7 @@
             @foreach (session('cart') as $id => $details)
                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                     <div class="col-md-2 col-xl-2">
-                        <img src="{{ $details['image'] }}" class="img-fluid rounded-3" alt="{{ $details['name'] }}">
+                        <img src="{{ asset('images/'.$details['image']) }}" class="img-fluid rounded-3" alt="{{ $details['name'] }}">
                     </div>
                     <div class="col-md-3 col-lg-3 col-xl-3">
                         <h6 class="text-black mb-0">{{ $details['name'] }}</h6>

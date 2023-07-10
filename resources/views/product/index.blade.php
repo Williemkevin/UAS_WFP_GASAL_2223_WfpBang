@@ -8,7 +8,7 @@
     {{-- @php
         dd($productAktif)
     @endphp --}}
-    @if(str_contains(Auth::user()->role, 'staff')|| str_contains(Auth::user()->role, 'owner'))
+    @if(str_contains(Auth::user()->role, 'owner'))
     <div style="float: right; margin: 15px;">
         <a href="{{ route('product.create') }}" class="btn btn-success btn-m"><i class="fa fa-plus"></i> Add Produk</a>
     </div>

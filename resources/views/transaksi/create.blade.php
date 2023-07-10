@@ -280,13 +280,13 @@
     function getTotalBelanja(){
         var totalBelanja = 0;
         for (let i = 0; i < arrayProduk.length; i++) {
-            totalBelanja += arrayProduk[i].price * arrayProduk[i].quantity 
+            totalBelanja += arrayProduk[i].price * arrayProduk[i].quantity
         }
         return totalBelanja;
     }
     function getPajak(){
         // pajak = getTotalBelanja()*0.11;
-        pajak = getSubtotal()*0.11;
+        pajak = getTotalBelanja()*0.11;
         return pajak;
     }
     function getGrandTotal(){
